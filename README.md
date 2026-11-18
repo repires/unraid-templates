@@ -1,24 +1,20 @@
-<img src="icon.svg" alt="" width="72" align="right">
-
-# Unraid templates by repires
+# <img src="icon.svg" alt="" width="40" align="center"> Unraid templates by repires
 
 Docker templates for Unraid, published in Community Applications as **pires' Repository**.
 Install them from the **Apps** tab by searching for the app name. Each template's `TemplateURL`
 points at its XML in this repository, so template fixes reach installed apps.
 
-| | App | Templates | Images |
-|:-:|---|---|---|
-| <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="32"> | [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
-| <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="32"> | [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
-| <img src="icons/error-pages.svg" alt="" width="32"> | [error-pages](#error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
-| <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="32"> | [RClone Manager](#rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
-| <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="32"> | [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
+| App | Templates | Images |
+|---|---|---|
+| <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="24" align="center"> [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
+| <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="24" align="center"> [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
+| <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
+| <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
+| <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
 
-## ai-memory
-
-<img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="ai-memory logo" width="64" align="right">
+## <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="32" align="center"> ai-memory
 
 [ai-memory](https://github.com/akitaonrails/ai-memory) (MIT, by Fabio Akita) gives AI coding agents
 persistent, shared memory over MCP: session capture, a searchable wiki and handoffs between agents.
@@ -46,9 +42,7 @@ Notes:
   password after the first start. **Don't set a root password on plain HTTP:** ai-memory then
   refuses to start, and keeps refusing until Secure cookie is enabled behind HTTPS.
 
-## OpenMausBot
-
-<img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="OpenMausBot logo" width="64" align="right">
+## <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="32" align="center"> OpenMausBot
 
 [OpenMausBot](https://github.com/milind-soni/OpenMausBot) (Apache-2.0, by Milind Soni) is an
 open-source workspace for AI bots: chat with bots that run Claude Code, Codex, OpenCode and other
@@ -83,9 +77,7 @@ Notes:
   3. Set **Webhook public URL** to that hostname (`https://hooks.example.com`) so new hook URLs
      use it. Each hook URL carries its own secret `wh_…` token. The app itself stays private.
 
-## error-pages
-
-<img src="icons/error-pages.svg" alt="error-pages logo" width="64" align="right">
+## <img src="icons/error-pages.svg" alt="" width="32" align="center"> error-pages
 
 [error-pages](https://github.com/tarampampam/error-pages) (MIT, by tarampampam) serves themed HTTP
 error pages (404, 502, 503 and others) for a reverse proxy. The template runs the upstream image
@@ -98,9 +90,7 @@ error pages (404, 502, 503 and others) for a reverse proxy. The template runs th
   UI may already use 8080, so pick another port if so.
 - Error pages are served as HTML, JSON, XML or plain text, depending on the request's `Accept` header.
 
-## RClone Manager
-
-<img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="RClone Manager logo" width="64" align="right">
+## <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="32" align="center"> RClone Manager
 
 [RClone Manager](https://github.com/Zarestia-Dev/rclone-manager) (GPL-3.0, by Zarestia-Dev) is a web
 UI for rclone: set up remotes, browse them, and run or schedule sync, copy, move and bisync jobs.
@@ -120,9 +110,7 @@ It downloads the current rclone into the Data folder on first start.
 - To mount remotes with FUSE, add `--device /dev/fuse --cap-add SYS_ADMIN --security-opt
   apparmor:unconfined` to Extra Parameters.
 
-## Nod
-
-<img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="Nod logo" width="64" align="right">
+## <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="32" align="center"> Nod
 
 [Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team. Upstream
 ships it as a [Docker Compose stack](https://nod.n8n.io/docs/deploy/self-host/). These templates

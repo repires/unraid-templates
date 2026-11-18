@@ -21,7 +21,7 @@ Template maintained by repires; RClone Manager is developed by Zarestia-Dev (GPL
   <Category>Backup: Cloud: Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:8080]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rclone-manager.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png</Icon>
+  <Icon>https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/src/assets/rclone-manager.svg</Icon>
   <ExtraParams>--restart=unless-stopped</ExtraParams>
   <PostArgs/>
   <CPUset/>

@@ -6,11 +6,11 @@ points at its XML in this repository, so template fixes reach installed apps.
 
 | App | Templates | Images |
 |---|---|---|
-| <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="24" align="center"> [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
-| <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="24" align="center"> [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
-| <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
-| <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
-| <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
+| <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="24" align="center"> [ai-memory](#-ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
+| <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="24" align="center"> [OpenMausBot](#-openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
+| <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#-error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
+| <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#-rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
+| <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#-nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
 

@@ -1,65 +1,125 @@
 # Unraid templates by repires
 
-Community Applications templates for Unraid.
+Docker templates for Unraid, published in Community Applications as **pires' Repository**.
+Install them from the **Apps** tab by searching for the app name. Each template's `TemplateURL`
+points at its XML in this repository, so template fixes reach installed apps.
+
+| App | Templates | Images |
+|---|---|---|
+| [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
+| [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
+
+Tested on Unraid 7.3 with Docker 29.
 
 ## ai-memory
 
 [ai-memory](https://github.com/akitaonrails/ai-memory) (MIT, by Fabio Akita) gives AI coding agents
 persistent, shared memory over MCP: session capture, a searchable wiki and handoffs between agents.
-The template uses the upstream image `akitaonrails/ai-memory:latest` unchanged.
+It is a single container with a SQLite database. The template runs the upstream image
+`akitaonrails/ai-memory:latest` as published; nothing is rebuilt here.
 
-1. Set **Auth token** (`openssl rand -hex 32`) and add your server's LAN IP and hostname to **Allowed hosts**.
-2. Point MCP clients at `http://<server>:49374/mcp` with `Authorization: Bearer <token>`.
-   With the ai-memory CLI on the client, run `ai-memory install-mcp --client <name> --auth-token <token>`.
-3. The container runs as `99:100` (nobody:users), so Unraid-created appdata folders work without changes.
-4. The web console needs HTTPS. Put it behind a reverse proxy, then set **Secure cookie** to `true`,
-   a **Root username** and an **Initial root password**. Don't set a password on plain HTTP:
-   ai-memory then refuses to start.
+1. Set **Auth token**, for example from `openssl rand -hex 32`. It is required because without
+   a token ai-memory accepts every request.
+2. Add every hostname and IP your clients use to reach the server to **Allowed hosts**, for example
+   `localhost,127.0.0.1,192.168.1.10,tower.local`. Requests with any other `Host` header are refused.
+3. Point MCP clients at `http://<server>:49374/mcp` with `Authorization: Bearer <token>`. With the
+   ai-memory CLI on the client machine, `ai-memory install-mcp --client <name> --auth-token <token>`
+   writes the client config.
+4. LLM and embedding providers are optional (Advanced view). Without them ai-memory uses
+   full-text search and rule-based summaries.
+
+Notes:
+
+- The container runs as `99:100` (nobody:users), which owns the appdata folders Unraid creates,
+  so no permission changes are needed.
+- On plain HTTP the bearer token travels unencrypted, and ai-memory logs a warning about it. Use
+  a reverse proxy with HTTPS if clients connect over an untrusted network.
+- The web console (`/web`) needs HTTPS. Put ai-memory behind a reverse proxy, then set
+  **Secure cookie** to `true`, a **Root username** and an **Initial root password**. Clear the
+  password after the first start. **Don't set a root password on plain HTTP:** ai-memory then
+  refuses to start, and keeps refusing until Secure cookie is enabled behind HTTPS.
 
 ## Nod
 
-[Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team.
-Upstream ships it as a Docker Compose stack. These templates install the same six
-containers through the Unraid Docker tab, with the same isolation.
+[Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team. Upstream
+ships it as a [Docker Compose stack](https://nod.n8n.io/docs/deploy/self-host/). These templates
+run the same six containers as separate Unraid apps.
 
 > Unofficial community packaging, not affiliated with or endorsed by n8n GmbH.
 > Nod is © n8n GmbH, licensed under Apache-2.0. See its [NOTICE](https://github.com/n8n-io/nod/blob/main/NOTICE)
 > for bundled components, including a GPL-3.0-or-later speech component whose source is in the upstream repository.
 
-| # | Template | Image | Network | Role |
-|---|---|---|---|---|
-| 1 | `nod-postgres` | `ghcr.io/repires/nod-postgres` | `nod` | PostgreSQL 17 |
-| 2 | `nod-runtime` | `ghcr.io/repires/nod-runtime` | `nod` | Filtered Docker API: exec into the workspace and browser only |
-| 3 | `nod-browser-unraid` | `ghcr.io/repires/nod-browser` | `bridge` | Headless browser |
-| 4 | `nod-workspace-network` | `ghcr.io/repires/nod-workspace` | `bridge` | Firewall: public internet only, LAN/Tailscale/private ranges blocked |
-| 5 | `nod-workspace-unraid` | `ghcr.io/repires/nod-workspace` | `container:nod-workspace-network` | Command and file sandbox |
-| 6 | `nod-server` | `ghcr.io/repires/nod-server` | `nod`, port 4310 | App and API |
+| # | Template | Image | Network | Runs as | Role |
+|---|---|---|---|---|---|
+| 1 | `nod-postgres` | `ghcr.io/repires/nod-postgres` | `nod` | postgres | PostgreSQL 17 (official `postgres:17-alpine` with a healthcheck) |
+| 2 | `nod-runtime` | `ghcr.io/repires/nod-runtime` | `nod` | root, with the Docker socket | Filtered Docker API: only lets `nod-server` exec into the workspace and browser |
+| 3 | `nod-browser-unraid` | `ghcr.io/repires/nod-browser` | `bridge` | uid 1000 | Headless browser |
+| 4 | `nod-workspace-network` | `ghcr.io/repires/nod-workspace` | `bridge` | root, `NET_ADMIN` | Firewall for the workspace: public internet only |
+| 5 | `nod-workspace-unraid` | `ghcr.io/repires/nod-workspace` | `container:nod-workspace-network` | uid 1000 | Command and file sandbox |
+| 6 | `nod-server` | `ghcr.io/repires/nod-server` | `nod`, port 4310 | uid 1000 | App and API |
 
 ### Install
 
-1. Create the shared network once, in the Unraid terminal: `docker network create nod`
+1. Create the shared network once, in the Unraid terminal: `docker network create nod`.
+   Templates 1, 2 and 6 attach to it. If it is missing, Unraid starts them with no network.
 2. Pick a database password made of letters and digits, for example from `openssl rand -hex 24`.
-3. Install the templates **in the order above**. Enter the database password in `nod-postgres` and `nod-server`.
-4. Nod requires **HTTPS**. Point a reverse proxy (SWAG, Nginx Proxy Manager, Traefik) or Tailscale Serve at port 4310. Then set `nod-server`'s **Public URL** to that exact address, for example `https://nod.example.com`. Opening `http://<server>:4310` directly returns 403.
-5. Sign in with `NOD_AUTH_TOKEN` from `/mnt/user/appdata/nod/server/secrets.env`, which is generated on first start. **Back up `NOD_VAULT_KEY`** from the same file. Then connect a model under **Models**.
+3. Install the templates **in the order above**. Enter the same database password in
+   `nod-postgres` and `nod-server`.
+4. Nod requires **HTTPS**. Point a reverse proxy (SWAG, Nginx Proxy Manager, Traefik) or
+   Tailscale Serve at port 4310, and set `nod-server`'s **Public URL** to that exact origin, for
+   example `https://nod.example.com`. Nod only answers requests for that origin, so opening
+   `http://<server>:4310` directly returns 403. That is also why the template has no WebUI link.
+5. On first start `nod-server` generates `NOD_AUTH_TOKEN` and `NOD_VAULT_KEY` in
+   `/mnt/user/appdata/nod/server/secrets.env` (unless you set them in the template's Advanced
+   view). Sign in with `NOD_AUTH_TOKEN`, then connect a model under **Models**.
+   **Back up `NOD_VAULT_KEY`:** without it, saved credentials cannot be decrypted.
 
 ### Notes
 
-- Keep the container names. `nod-server` and `nod-runtime` find the workspace and browser by name (`nod-workspace-*` and `nod-browser-*`).
-- After restarting or updating `nod-workspace-network`, restart `nod-workspace-unraid`.
-- Containers run as uid 1000 with a read-only root filesystem and all capabilities dropped. On start they briefly keep `CHOWN`/`SETUID`/`SETGID` to give new appdata folders to uid 1000, then drop to the `node` user.
-- Analytics and in-app feedback to the Nod team are off by default.
+- **Container names:** keep them. `nod-server` and `nod-runtime` find the workspace and browser
+  by name, and the runtime only accepts names starting with `nod-workspace-` and `nod-browser-`.
+- **Restart order:** after restarting or updating `nod-workspace-network`, restart
+  `nod-workspace-unraid`. Compose does this automatically; Unraid does not.
+- **Hardening:**
+  - The server, browser, runtime and workspace firewall have a read-only root filesystem.
+  - The server, browser and workspace drop all capabilities except `CHOWN`, `SETUID` and
+    `SETGID`. Their entrypoint uses these as root to give new appdata folders to uid 1000,
+    then runs Nod as the `node` user. The runtime drops all capabilities, and the firewall
+    keeps only `NET_ADMIN`.
+  - Those five containers also set `no-new-privileges` and memory and process limits.
+    `nod-postgres` runs with the official Postgres image's defaults.
+- **Isolation compared with upstream's Compose stack:**
+  - Kept: the workspace firewall blocks LAN, Tailscale (`100.64.0.0/10`), Docker and other
+    private ranges, and the runtime only allows exec into the two Nod containers.
+  - Relaxed: upstream also puts the database and runtime on internal networks with no internet
+    access, and the browser on its own network. Here they share the user-created `nod` bridge,
+    and the browser uses Unraid's default bridge.
+- **Telemetry:** analytics and in-app feedback to the Nod team are off by default.
 
 ### Images
 
-`.github/workflows/nod-images.yml` checks for a new upstream release daily. For each one it:
+[`.github/workflows/nod-images.yml`](.github/workflows/nod-images.yml) publishes five images to
+`ghcr.io/repires`. It runs daily, on manual dispatch, and on pushes that change `images/nod`.
+The daily run does nothing if the latest upstream release is already published.
 
-1. builds the three upstream images exactly as `deployment/self-host/compose.yaml` does;
-2. adds the small wrappers in `images/nod`;
-3. pushes `:<version>` and `:latest` to GHCR.
+1. **`nod-server`, `nod-browser`, `nod-workspace`:** built from the upstream release tag with
+   upstream's own Dockerfiles, plus the wrappers in [`images/nod`](images/nod). The wrappers add
+   the appdata-ownership entrypoint, secret generation and healthchecks.
+2. **`nod-runtime`:** `node` with the release's `docker-proxy.mjs`.
+3. **`nod-postgres`:** `postgres:17-alpine` with Nod's database defaults and a healthcheck.
 
-To rebuild a specific release, run the workflow manually with its tag.
+Each image is tagged `:<version>` and `:latest`, and the templates use `:latest`, so Unraid
+shows an update when a new Nod release is published. To rebuild a specific release, run the
+workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
+
+## Support
+
+Report template or image problems in this repository's
+[issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
+themselves upstream: [ai-memory](https://github.com/akitaonrails/ai-memory/issues),
+[Nod](https://github.com/n8n-io/nod/issues).
 
 ## License
 
-The templates, wrappers and workflow in this repository are MIT licensed. Nod itself is Apache-2.0 (n8n GmbH).
+The templates, wrappers and workflow in this repository are MIT licensed. ai-memory is MIT
+(Fabio Akita). Nod is Apache-2.0 (n8n GmbH).

@@ -9,6 +9,8 @@ Unraid templates maintained by repires.
 
 **error-pages**: themed HTTP error pages for Traefik and other reverse proxies (https://github.com/tarampampam/error-pages), using the upstream image.
 
+**RClone Manager**: web UI for rclone remotes and scheduled sync and backup jobs (https://github.com/Zarestia-Dev/rclone-manager), using the upstream image.
+
 **Nod**: a self-hosted personal AI assistant from the n8n team (https://nod.n8n.io), packaged for Unraid as six containers: database, Docker gateway, browser, workspace firewall, workspace sandbox and server. This is unofficial community packaging and is not affiliated with n8n GmbH. Images are built from upstream releases by GitHub Actions in this repository.
 
 Support and bug reports: https://github.com/repires/unraid-templates/issues

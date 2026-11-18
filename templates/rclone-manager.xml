@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rclone-manager</Name>
+  <Repository>ghcr.io/zarestia-dev/rclone-manager:latest</Repository>
+  <Registry>https://github.com/Zarestia-Dev/rclone-manager/pkgs/container/rclone-manager</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://github.com/Zarestia-Dev/rclone-manager</Project>
+  <Overview>RClone Manager is a web interface for rclone: set up remotes (Google Drive, OneDrive, S3, Backblaze B2, SFTP and many more), browse them, and run or schedule sync, copy, move and bisync jobs. The container downloads the current rclone on first start and keeps it in the Data folder.
+
+Your Unraid shares are mounted at /mnt/user, so use paths such as /mnt/user/backups as local sources and destinations.
+
+Cloud sign-in (OAuth): rclone's sign-in callback only listens inside the container, so for Google Drive, OneDrive and Dropbox answer No to the browser question and paste a token made with: rclone authorize "drive" on a computer with a browser.
+
+Optional: set a Master secret so saved remote passwords and tokens survive restarts, and a username and password to protect the web UI (or put it behind a reverse proxy). To mount remotes with FUSE, add to Extra Parameters: --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined
+
+Template maintained by repires; RClone Manager is developed by Zarestia-Dev (GPL-3.0).</Overview>
+  <Category>Backup: Cloud: Tools:Utilities</Category>
+  <WebUI>http://[IP]:[PORT:8080]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rclone-manager.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8080</HostPort>
+        <ContainerPort>8080</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rclone-manager/config</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rclone-manager/data</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user</HostDir>
+      <ContainerDir>/mnt/user</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>99</Value><Name>PUID</Name><Mode/></Variable>
+    <Variable><Value>100</Value><Name>PGID</Name><Mode/></Variable>
+    <Variable><Value/><Name>RCLONE_MANAGER_SECRET</Name><Mode/></Variable>
+    <Variable><Value/><Name>RCLONE_MANAGER_USER</Name><Mode/></Variable>
+    <Variable><Value/><Name>RCLONE_MANAGER_PASS</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Web port" Target="8080" Default="8080" Mode="tcp" Description="Host port for the web UI. Unraid's own web UI may already use 8080; pick another port in that case." Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+  <Config Name="rclone config" Target="/config" Default="/mnt/user/appdata/rclone-manager/config" Mode="rw" Description="rclone.conf with your remotes." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/rclone-manager/config</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/rclone-manager/data" Mode="rw" Description="App settings, jobs, logs, cache and the downloaded rclone binary." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/rclone-manager/data</Config>
+  <Config Name="Unraid shares" Target="/mnt/user" Default="/mnt/user" Mode="rw" Description="Local storage for jobs. Keep it mounted outside /home/rclone-manager: the image changes ownership of everything under that folder (and /data, /config) at every start." Type="Path" Display="always" Required="false" Mask="false">/mnt/user</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="User ID the app runs as. 99 (nobody) matches Unraid shares." Type="Variable" Display="advanced" Required="true" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Group ID the app runs as. 100 (users) matches Unraid shares." Type="Variable" Display="advanced" Required="true" Mask="false">100</Config>
+  <Config Name="Master secret" Target="RCLONE_MANAGER_SECRET" Default="" Mode="" Description="Optional but recommended. Encrypts saved remote passwords and tokens; without it they are kept in memory only and must be re-entered after every restart." Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="Web UI username" Target="RCLONE_MANAGER_USER" Default="" Mode="" Description="Optional basic-auth username for the web UI. Leave empty when a reverse proxy handles login." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Web UI password" Target="RCLONE_MANAGER_PASS" Default="" Mode="" Description="Optional basic-auth password for the web UI." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+</Container>

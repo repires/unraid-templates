@@ -9,6 +9,7 @@ points at its XML in this repository, so template fixes reach installed apps.
 | [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
 | [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
 | [error-pages](#error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
+| [RClone Manager](#rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
 | [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
@@ -89,6 +90,26 @@ error pages (404, 502, 503 and others) for a reverse proxy. The template runs th
   UI may already use 8080, so pick another port if so.
 - Error pages are served as HTML, JSON, XML or plain text, depending on the request's `Accept` header.
 
+## RClone Manager
+
+[RClone Manager](https://github.com/Zarestia-Dev/rclone-manager) (GPL-3.0, by Zarestia-Dev) is a web
+UI for rclone: set up remotes, browse them, and run or schedule sync, copy, move and bisync jobs.
+The template runs the upstream image `ghcr.io/zarestia-dev/rclone-manager:latest` as published.
+It downloads the current rclone into the Data folder on first start.
+
+- It runs as `PUID 99` / `PGID 100` (nobody:users), so jobs can read and write Unraid shares,
+  mounted at `/mnt/user`.
+- Keep storage out of `/home/rclone-manager`. The image's entrypoint recursively changes the owner
+  of that folder, `/data` and `/config` at every start, which on a large share is slow and rewrites
+  every file's owner.
+- Set **Master secret** so saved remote passwords and tokens survive restarts. Without it they are
+  kept in memory only.
+- For Google Drive, OneDrive and Dropbox, rclone's sign-in callback only listens inside the
+  container. Answer **No** to the browser question and paste a token made with `rclone authorize`
+  on a computer with a browser.
+- To mount remotes with FUSE, add `--device /dev/fuse --cap-add SYS_ADMIN --security-opt
+  apparmor:unconfined` to Extra Parameters.
+
 ## Nod
 
 [Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team. Upstream
@@ -168,10 +189,11 @@ Report template or image problems in this repository's
 [issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
 themselves upstream: [ai-memory](https://github.com/akitaonrails/ai-memory/issues),
 [OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues),
-[error-pages](https://github.com/tarampampam/error-pages/issues), [Nod](https://github.com/n8n-io/nod/issues).
+[error-pages](https://github.com/tarampampam/error-pages/issues),
+[RClone Manager](https://github.com/Zarestia-Dev/rclone-manager/issues), [Nod](https://github.com/n8n-io/nod/issues).
 
 ## License
 
 The templates, wrappers and workflow in this repository are MIT licensed. ai-memory is MIT
-(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni), error-pages is MIT (tarampampam) and Nod is
-Apache-2.0 (n8n GmbH).
+(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni), error-pages is MIT (tarampampam),
+RClone Manager is GPL-3.0 (Zarestia-Dev) and Nod is Apache-2.0 (n8n GmbH).

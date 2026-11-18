@@ -12,7 +12,7 @@
   <Overview>Nod (4 of 6): firewall that owns the network of nod-workspace-unraid. It lets the workspace reach the public internet but blocks your LAN, Tailscale (100.64.0.0/10), Docker networks and other private ranges. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Install this before nod-workspace-unraid. If you restart or update this container, restart nod-workspace-unraid afterwards.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-workspace-network.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

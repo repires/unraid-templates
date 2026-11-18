@@ -16,7 +16,7 @@ Install order: nod-postgres, nod-runtime, nod-browser-unraid, nod-workspace-netw
 Before installing, create the shared network once in the Unraid terminal: docker network create nod
 
 Choose a database password made of letters and digits only, and enter the same password in nod-server.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-postgres.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

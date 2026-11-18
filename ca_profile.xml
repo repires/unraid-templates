@@ -3,6 +3,8 @@
   <Profile>
 Unraid templates maintained by repires.
 
+**ai-memory**: persistent, shared memory for AI coding agents over MCP (https://github.com/akitaonrails/ai-memory), using the upstream image.
+
 **Nod**: a self-hosted personal AI assistant from the n8n team (https://nod.n8n.io), packaged for Unraid as six containers: database, Docker gateway, browser, workspace firewall, workspace sandbox and server. This is unofficial community packaging and is not affiliated with n8n GmbH. Images are built from upstream releases by GitHub Actions in this repository.
 
 Support and bug reports: https://github.com/repires/unraid-templates/issues

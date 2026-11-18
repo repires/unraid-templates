@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>ai-memory</Name>
+  <Repository>akitaonrails/ai-memory:latest</Repository>
+  <Registry>https://hub.docker.com/r/akitaonrails/ai-memory</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/akitaonrails/ai-memory/issues</Support>
+  <Project>https://github.com/akitaonrails/ai-memory</Project>
+  <Overview>ai-memory is persistent, shared memory for AI coding agents (Claude Code, Codex, Cursor, OpenCode and other MCP clients). It records sessions, builds a searchable wiki of what your agents learned, and hands context from one agent or session to the next. It runs as one container with a SQLite database and needs no API keys; an LLM provider is optional and improves summaries.
+
+Connect clients to http://[server IP]:49374/mcp with the Auth token as a Bearer token. On a client machine with the ai-memory CLI, run: ai-memory install-mcp --client claude-code --auth-token YOUR_TOKEN
+
+Allowed hosts must list every hostname or IP that clients use to reach this server; other Host headers are refused.
+
+The web console (/web) needs HTTPS: put a reverse proxy in front, then set Secure cookie to true, a Root username and an Initial root password. Do not set a root password without HTTPS, because ai-memory then refuses to start on plain HTTP.
+
+Template maintained by repires; ai-memory is developed by Fabio Akita (MIT).</Overview>
+  <Category>AI: Tools:Utilities</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/ai-memory.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png</Icon>
+  <ExtraParams>--user=99:100</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>49374</HostPort>
+        <ContainerPort>49374</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/ai-memory</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value/><Name>AI_MEMORY_AUTH_TOKEN</Name><Mode/></Variable>
+    <Variable><Value>localhost,127.0.0.1</Value><Name>AI_MEMORY_ALLOWED_HOSTS</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_LLM_PROVIDER</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_LLM_BASE_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_LLM_MODEL</Name><Mode/></Variable>
+    <Variable><Value/><Name>LLM_API_KEY</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_EMBEDDING_PROVIDER</Name><Mode/></Variable>
+    <Variable><Value/><Name>EMBEDDING_API_KEY</Name><Mode/></Variable>
+    <Variable><Value>false</Value><Name>AI_MEMORY_AUTH__SECURE_COOKIE</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_AUTH__ROOT_USERNAME</Name><Mode/></Variable>
+    <Variable><Value/><Name>AI_MEMORY_AUTH__INITIAL_ROOT_PASSWORD</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Port" Target="49374" Default="49374" Mode="tcp" Description="Host port for MCP clients, hooks and the API (http://[server IP]:PORT/mcp)." Type="Port" Display="always" Required="true" Mask="false">49374</Config>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/ai-memory" Mode="rw" Description="Database, wiki, logs and settings. The container runs as nobody:users (99:100), like other Unraid apps." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/ai-memory</Config>
+  <Config Name="Auth token" Target="AI_MEMORY_AUTH_TOKEN" Default="" Mode="" Description="Required. Every MCP, hook and API request must send it as Authorization: Bearer. Generate one with: openssl rand -hex 32" Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Allowed hosts" Target="AI_MEMORY_ALLOWED_HOSTS" Default="localhost,127.0.0.1" Mode="" Description="Comma-separated hostnames and IPs clients use to reach this server. Add your server's LAN IP and name, for example: localhost,127.0.0.1,192.168.1.10,tower.local" Type="Variable" Display="always" Required="true" Mask="false">localhost,127.0.0.1</Config>
+  <Config Name="LLM provider" Target="AI_MEMORY_LLM_PROVIDER" Default="" Mode="" Description="Optional. anthropic, openai, gemini, openai-compat (Ollama, OpenRouter, LM Studio...) or opencode. Empty uses rule-based summaries with no API cost." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="LLM base URL" Target="AI_MEMORY_LLM_BASE_URL" Default="" Mode="" Description="For openai-compat, for example http://192.168.1.10:11434/v1 (Ollama) or https://openrouter.ai/api/v1." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="LLM model" Target="AI_MEMORY_LLM_MODEL" Default="" Mode="" Description="Optional model name for the chosen provider." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="LLM API key" Target="LLM_API_KEY" Default="" Mode="" Description="API key for the LLM provider (for anthropic, openai or gemini you can instead add ANTHROPIC_API_KEY, OPENAI_API_KEY or GEMINI_API_KEY as a new variable)." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Embedding provider" Target="AI_MEMORY_EMBEDDING_PROVIDER" Default="" Mode="" Description="Optional: openai or voyage, for hybrid (semantic + full-text) search. Empty uses full-text search only." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Embedding API key" Target="EMBEDDING_API_KEY" Default="" Mode="" Description="API key for the embedding provider." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Secure cookie" Target="AI_MEMORY_AUTH__SECURE_COOKIE" Default="false" Mode="" Description="Set to true only when the web console is served over HTTPS by a reverse proxy. Required for web login." Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+  <Config Name="Root username" Target="AI_MEMORY_AUTH__ROOT_USERNAME" Default="" Mode="" Description="Username for web console login (HTTPS only), for example admin." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Initial root password" Target="AI_MEMORY_AUTH__INITIAL_ROOT_PASSWORD" Default="" Mode="" Description="HTTPS only: set Secure cookie to true first, or ai-memory will refuse to start. Used once on first start to create the web login (12+ characters); clear it afterwards." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+</Container>

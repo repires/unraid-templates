@@ -12,7 +12,7 @@
   <Overview>Nod (3 of 6): headless browser that Nod uses on your behalf. nod-server drives it only through nod-runtime, never over the network. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Keep the container name unchanged: nod-server and nod-runtime look it up by name.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-browser-unraid.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

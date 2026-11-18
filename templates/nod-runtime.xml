@@ -12,7 +12,7 @@
   <Overview>Nod (2 of 6): filtered Docker API gateway, using upstream's docker-proxy.mjs. It holds the Docker socket but only allows nod-server to run commands inside nod-workspace-unraid and nod-browser-unraid. Every other Docker request is refused. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Keep the container name and the two container-name variables unchanged unless you also change them in nod-server.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-runtime.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

@@ -16,7 +16,7 @@ Install this last: nod-postgres, nod-runtime, nod-browser-unraid, nod-workspace-
 HTTPS is required. Nod only accepts the exact origin set in Public URL, and plain HTTP is allowed only on localhost. Put Nod behind a reverse proxy (for example SWAG, Nginx Proxy Manager or Traefik) pointing at this container's port 4310, or use Tailscale Serve, and enter that HTTPS address as Public URL. Opening http://[server IP]:4310 directly returns 403.
 
 On first start Nod generates NOD_AUTH_TOKEN and NOD_VAULT_KEY in [AppData]/secrets.env. Sign in with NOD_AUTH_TOKEN from that file. Back up NOD_VAULT_KEY: without it, saved credentials cannot be decrypted. Connect an AI model after signing in, under Models.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-server.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

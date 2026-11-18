@@ -12,7 +12,7 @@
   <Overview>Nod (5 of 6): sandbox where Nod runs commands and works with files for your sessions. It shares the firewalled network of nod-workspace-network, so it can reach the public internet but not your LAN, Tailscale or other containers. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Keep the container name unchanged: nod-server and nod-runtime look it up by name. The Workspaces path must be the same host folder as in nod-server.</Overview>
-  <Category>Productivity: Tools:</Category>
+  <Category>AI: Productivity:</Category>
   <WebUI/>
   <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-workspace-unraid.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>

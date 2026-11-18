@@ -2,6 +2,20 @@
 
 Community Applications templates for Unraid.
 
+## ai-memory
+
+[ai-memory](https://github.com/akitaonrails/ai-memory) (MIT, by Fabio Akita) gives AI coding agents
+persistent, shared memory over MCP: session capture, a searchable wiki and handoffs between agents.
+The template uses the upstream image `akitaonrails/ai-memory:latest` unchanged.
+
+1. Set **Auth token** (`openssl rand -hex 32`) and add your server's LAN IP and hostname to **Allowed hosts**.
+2. Point MCP clients at `http://<server>:49374/mcp` with `Authorization: Bearer <token>`.
+   With the ai-memory CLI on the client, run `ai-memory install-mcp --client <name> --auth-token <token>`.
+3. The container runs as `99:100` (nobody:users), so Unraid-created appdata folders work without changes.
+4. The web console needs HTTPS. Put it behind a reverse proxy, then set **Secure cookie** to `true`,
+   a **Root username** and an **Initial root password**. Don't set a password on plain HTTP:
+   ai-memory then refuses to start.
+
 ## Nod
 
 [Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team.

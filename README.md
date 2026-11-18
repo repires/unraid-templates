@@ -183,6 +183,21 @@ Each image is tagged `:<version>` and `:latest`, and the templates use `:latest`
 shows an update when a new Nod release is published. To rebuild a specific release, run the
 workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
 
+## Keeping templates current
+
+- **Upstream images (ai-memory, OpenMausBot, error-pages, RClone Manager):** the templates follow
+  a moving tag (`latest`, or `4` for error-pages), so Unraid's update check offers each new upstream
+  build. Nothing is rebuilt here.
+- **Nod:** [`nod-images.yml`](.github/workflows/nod-images.yml) builds every new upstream release
+  daily, and rebuilds the current one weekly so the Postgres, Node and Debian base images get
+  security fixes between Nod releases.
+- **Upstream watch:** [`upstream-watch.yml`](.github/workflows/upstream-watch.yml) runs weekly and
+  fingerprints the upstream files each template depends on (Dockerfiles, compose files,
+  entrypoints), listed in [`.github/upstream-watch.json`](.github/upstream-watch.json). It also
+  checks error-pages for a new major version. When something changes it opens an
+  `upstream-change` issue with a diff link. After reviewing the template, run the workflow with
+  **accept** to record the new state.
+
 ## Support
 
 Report template or image problems in this repository's

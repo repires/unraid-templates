@@ -1,0 +1,65 @@
+name: Upstream watch
+
+# Weekly check of the upstream files each template depends on. A change opens
+# (or updates) one issue per app; after reviewing the template, run this
+# workflow with "accept" to record the new upstream state as the baseline.
+on:
+  schedule:
+    - cron: '17 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      accept:
+        description: Record the current upstream state as reviewed (updates the baseline).
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: upstream-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Accept the current upstream state
+        if: inputs.accept
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 .github/scripts/upstream_watch.py update
+          if ! git diff --quiet .github/upstream-watch.json; then
+            git -c user.name=repires -c user.email=rdandreap@gmail.com \
+              commit -m "Record reviewed upstream state" .github/upstream-watch.json
+            git push
+          fi
+          for n in $(gh issue list --label upstream-change --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "Reviewed; baseline updated."
+          done
+
+      - name: Check upstreams
+        if: ${{ !inputs.accept }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          REPORT_DIR: upstream-reports
+        run: |
+          python3 .github/scripts/upstream_watch.py check
+          gh label create upstream-change --color FBCA04 --description "Upstream changed something a template depends on" 2>/dev/null || true
+          for f in upstream-reports/*.md; do
+            [ -e "$f" ] || continue
+            app=$(basename "$f" .md)
+            title="Upstream changes to review: $app"
+            n=$(gh issue list --label upstream-change --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+            if [ -n "$n" ]; then
+              gh issue edit "$n" --body-file "$f"
+            else
+              gh issue create --title "$title" --label upstream-change --body-file "$f"
+            fi
+          done

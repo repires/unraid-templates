@@ -13,7 +13,11 @@ on:
         type: boolean
         default: false
   schedule:
+    # Daily: build a new upstream release, if there is one.
     - cron: '23 7 * * *'
+    # Weekly: rebuild the current release anyway, so the Postgres, Node and Debian
+    # base images pick up security fixes between Nod releases.
+    - cron: '41 6 * * 1'
   push:
     branches: [main]
     paths: ['images/nod/**', '.github/workflows/nod-images.yml']
@@ -41,7 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           INPUT_TAG: ${{ inputs.tag }}
-          FORCE: ${{ inputs.force || github.event_name == 'push' }}
+          FORCE: ${{ inputs.force || github.event_name == 'push' || github.event.schedule == '41 6 * * 1' }}
         run: |
           tag=${INPUT_TAG:-$(gh api repos/n8n-io/nod/releases/latest --jq .tag_name)}
           case $tag in nod-v[0-9]*) ;; *) echo "Unexpected tag: $tag" >&2; exit 1 ;; esac

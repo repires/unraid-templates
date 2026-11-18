@@ -1,0 +1,118 @@
+{
+  "apps": {
+    "ai-memory": {
+      "repo": "akitaonrails/ai-memory",
+      "ref": "release",
+      "templates": [
+        "ai-memory"
+      ],
+      "files": [
+        "docker/Dockerfile",
+        "docker/docker-compose.yml"
+      ],
+      "baseline": {
+        "ref": "v3.5.0",
+        "commit": "bc7faa7d847dd387e634ba8420d115b9dd4ecebe",
+        "files": {
+          "docker/Dockerfile": "48c44beac6b2a1c8b43e8012c40c402ccb76fc6bab91c74867ee0a4ed68f8286",
+          "docker/docker-compose.yml": "dffbe344c6cfa07717b313a249d3614b9f28e805b2b65694c45b06846569371a"
+        }
+      }
+    },
+    "openmausbot": {
+      "repo": "milind-soni/OpenMausBot",
+      "ref": "release",
+      "templates": [
+        "openmausbot"
+      ],
+      "files": [
+        "Dockerfile",
+        "compose.yaml",
+        "deploy/docker-compose.yml"
+      ],
+      "baseline": {
+        "ref": "v0.1.169",
+        "commit": "b832de78c43c8d76e92d6f50fb1a8d33be364480",
+        "files": {
+          "Dockerfile": "ecb520d01cf7e03e80ff13c9a6a43aa8b1d7f92e96c9693a6309a3e4e2db805c",
+          "compose.yaml": "d4247781817da8600540fbb34a9d375d461ea6897b92354ccf76f1584ad21406",
+          "deploy/docker-compose.yml": "f876f0b441bb667ad97361586fbafefaff0bf53a54cd9bbd86a3b94a0f30074d"
+        }
+      }
+    },
+    "rclone-manager": {
+      "repo": "Zarestia-Dev/rclone-manager",
+      "ref": "branch",
+      "templates": [
+        "rclone-manager"
+      ],
+      "files": [
+        "Dockerfile",
+        "entrypoint.sh",
+        "docker-compose.yml"
+      ],
+      "baseline": {
+        "ref": "master",
+        "commit": "f04b8c1aad240c196fd6ddb330324b5bde46ebbb",
+        "files": {
+          "Dockerfile": "8a19adc242a517d819a99bcb4243b1afc37afc3ff24e7df55e2b0f3963c47fe0",
+          "entrypoint.sh": "b0528fd22f882e4b68a14befbcf198837cb2d4a3ed34671d76645d0b3a601210",
+          "docker-compose.yml": "f8b7eb1f1837661bf82ef34e23d4ec0fe97798bfd610abc316e2ba935e36b072"
+        }
+      }
+    },
+    "error-pages": {
+      "repo": "tarampampam/error-pages",
+      "ref": "release",
+      "major": "4",
+      "templates": [
+        "error-pages"
+      ],
+      "files": [
+        "Dockerfile"
+      ],
+      "baseline": {
+        "ref": "v4.2.7",
+        "commit": "106175124716d5006b50effe168ed1f95fefda6a",
+        "files": {
+          "Dockerfile": "adfe225ab8b051e0d010d4902d1036f5a408c0f6baafc8f074d47e5405a5b84b"
+        },
+        "latest_major": "4"
+      }
+    },
+    "nod": {
+      "repo": "n8n-io/nod",
+      "ref": "release",
+      "templates": [
+        "nod-server",
+        "nod-postgres",
+        "nod-runtime",
+        "nod-browser-unraid",
+        "nod-workspace-network",
+        "nod-workspace-unraid"
+      ],
+      "files": [
+        "deployment/self-host/compose.yaml",
+        "deployment/self-host/Dockerfile",
+        "deployment/self-host/docker-proxy.mjs",
+        "deployment/self-host/healthcheck.mjs",
+        "Dockerfile.browser",
+        "Dockerfile.workspace",
+        "src/providers/docker/workspace-network.sh"
+      ],
+      "baseline": {
+        "ref": "nod-v0.8.4",
+        "commit": "a4610949847372054e08fed4643550b83cd0c000",
+        "files": {
+          "deployment/self-host/compose.yaml": "0ad6af9afef0bce74e92db654025c3f191c624819b6e7320fbf26a82086687a0",
+          "deployment/self-host/Dockerfile": "568ac654e2ae70ad66aa64ed82f281a49e5fecd5f67e9593f4ff69bf6b652786",
+          "deployment/self-host/docker-proxy.mjs": "cb2be82c47e373fde31d2091a0d1acc1e2b57cf27d1ebdb3594820df87fffc41",
+          "deployment/self-host/healthcheck.mjs": "0432a6c7f7ff244610e1748e3a41e5327d4e839d501a79d941224914f0f492df",
+          "Dockerfile.browser": "37d353672e8b76ff6dbdde2814c4de4d257f86c842402b8c7f91e523528aefc5",
+          "Dockerfile.workspace": "0ea6d5c5151cffe0b2f39253ac67a0335db6ecd549789f3bf14fc0710d4435aa",
+          "src/providers/docker/workspace-network.sh": "8d11dc3239845bb6fb7605d3b0e53fb19b96b5e769712f7ae57fe44fb6f7ca1e"
+        }
+      }
+    }
+  }
+}

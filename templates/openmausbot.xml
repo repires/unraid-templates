@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>openmausbot</Name>
+  <Repository>ghcr.io/milind-soni/openmausbot:latest</Repository>
+  <Registry>https://github.com/milind-soni/OpenMausBot/pkgs/container/openmausbot</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://github.com/milind-soni/OpenMausBot</Project>
+  <Overview>OpenMausBot is an open-source workspace for AI bots (a Grok Bot alternative): chat with bots that run Claude Code, Codex and other engines, each with its own shell, files and browser. This template runs the official server image from the OpenMausBot project.
+
+First sign-in: open the Unraid terminal and run
+docker exec openmausbot openmausbot pair
+then open the printed link in your browser, or paste it into the desktop app or scan the QR code with your phone. Every device must pair once.
+
+Install AI engines (Claude Code, Codex, OpenCode...) from Settings, Engines, and sign them in from the app; they are kept in the AppData folder.
+
+Network access: the server answers only private addresses (LAN 10/8, 172.16/12, 192.168/16 and Tailscale 100.64/10) and refuses connections from public addresses. Plain HTTP is unencrypted, so for access from outside your LAN use Tailscale or an HTTPS reverse proxy and set Public URL to that address.
+
+Template maintained by repires; OpenMausBot is developed by Milind Soni (Apache-2.0).</Overview>
+  <Category>AI: Productivity:</Category>
+  <WebUI>http://[IP]:[PORT:8799]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/openmausbot.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png</Icon>
+  <ExtraParams>--user=99:100 --shm-size=512m --restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8799</HostPort>
+        <ContainerPort>8799</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/openmausbot</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value/><Name>OMB_PUBLIC_URL</Name><Mode/></Variable>
+    <Variable><Value>1</Value><Name>OMB_LAN</Name><Mode/></Variable>
+    <Variable><Value>unraid</Value><Name>OMB_SERVER_NAME</Name><Mode/></Variable>
+    <Variable><Value/><Name>OMB_PHONE_RELAY</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Web port" Target="8799" Default="8799" Mode="tcp" Description="Host port for the web app, desktop app and phones." Type="Port" Display="always" Required="true" Mask="false">8799</Config>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/openmausbot" Mode="rw" Description="Everything OpenMausBot keeps: settings, bots, workspaces, installed engines and their sign-ins. The container runs as nobody:users (99:100)." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/openmausbot</Config>
+  <Config Name="Public URL" Target="OMB_PUBLIC_URL" Default="" Mode="" Description="The address devices use to reach this server; pairing links point here. For example http://192.168.1.10:8799 (your server's LAN IP and the Web port), or an https:// address from Tailscale or a reverse proxy." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="LAN access" Target="OMB_LAN" Default="1" Mode="" Description="1 lets the server listen beyond the container while still refusing public addresses. Without it the server is only reachable from inside the container." Type="Variable" Display="advanced" Required="true" Mask="false">1</Config>
+  <Config Name="Server name" Target="OMB_SERVER_NAME" Default="unraid" Mode="" Description="Name the desktop and phone apps show for this server." Type="Variable" Display="advanced" Required="false" Mask="false">unraid</Config>
+  <Config Name="Phone relay" Target="OMB_PHONE_RELAY" Default="" Mode="" Description="Optional. 1 lets phones pair by QR through MausBot Relay; sign in once first with: docker exec -it openmausbot openmausbot login --relay" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+</Container>

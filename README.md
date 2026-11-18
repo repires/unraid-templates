@@ -7,6 +7,7 @@ points at its XML in this repository, so template fixes reach installed apps.
 | App | Templates | Images |
 |---|---|---|
 | [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
+| [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
 | [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
@@ -38,6 +39,32 @@ Notes:
   **Secure cookie** to `true`, a **Root username** and an **Initial root password**. Clear the
   password after the first start. **Don't set a root password on plain HTTP:** ai-memory then
   refuses to start, and keeps refusing until Secure cookie is enabled behind HTTPS.
+
+## OpenMausBot
+
+[OpenMausBot](https://github.com/milind-soni/OpenMausBot) (Apache-2.0, by Milind Soni) is an
+open-source workspace for AI bots: chat with bots that run Claude Code, Codex, OpenCode and other
+engines, each with its own shell, files and browser. The template runs the project's official
+server image `ghcr.io/milind-soni/openmausbot:latest` as published.
+
+1. Set **Public URL** to the address devices will use, for example `http://192.168.1.10:8799`,
+   or an `https://` address from Tailscale Serve or a reverse proxy.
+2. Pair your first browser: in the Unraid terminal run `docker exec openmausbot openmausbot pair`
+   and open the printed link (or paste it into the desktop app, or scan the QR code with a phone).
+   Every device pairs once.
+3. Install engines from **Settings → Engines** and sign them in from the app. They live in the
+   AppData folder, so image updates keep them.
+
+Notes:
+
+- `OMB_LAN=1` makes the server listen beyond the container. It still refuses connections from
+  public addresses: only private ranges (10/8, 172.16/12, 192.168/16, Tailscale 100.64/10 and
+  link-local) get through, and each device must pair.
+- The container runs as `99:100` (nobody:users), so Unraid-created appdata folders work as is.
+- Plain HTTP is unencrypted. For access beyond your LAN, use Tailscale Serve or an HTTPS reverse
+  proxy and set Public URL to that address.
+- Webhooks (`/hooks/*`) listen inside the container only in this setup. Use upstream's Compose
+  stack with Caddy if you need them reachable.
 
 ## Nod
 
@@ -117,9 +144,9 @@ workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
 Report template or image problems in this repository's
 [issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
 themselves upstream: [ai-memory](https://github.com/akitaonrails/ai-memory/issues),
-[Nod](https://github.com/n8n-io/nod/issues).
+[OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues), [Nod](https://github.com/n8n-io/nod/issues).
 
 ## License
 
 The templates, wrappers and workflow in this repository are MIT licensed. ai-memory is MIT
-(Fabio Akita). Nod is Apache-2.0 (n8n GmbH).
+(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni) and Nod is Apache-2.0 (n8n GmbH).

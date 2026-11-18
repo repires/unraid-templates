@@ -35,9 +35,15 @@ jobs:
         run: |
           python3 .github/scripts/upstream_watch.py update
           if ! git diff --quiet .github/upstream-watch.json; then
-            git -c user.name=repires -c user.email=rdandreap@gmail.com \
-              commit -m "Record reviewed upstream state" .github/upstream-watch.json
-            git push
+            # Commit through the contents API: GitHub signs it, so it shows as Verified
+            # (a git push from Actions would be unsigned).
+            f=.github/upstream-watch.json
+            gh api -X PUT "repos/${GITHUB_REPOSITORY}/contents/$f" \
+              -f message="Record reviewed upstream state" \
+              -f content="$(base64 -w0 "$f")" \
+              -f sha="$(git rev-parse "HEAD:$f")" \
+              -f branch="${GITHUB_REF_NAME}" \
+              -f 'author[name]=Renato Pires' -f 'author[email]=contact@raydev.ca' >/dev/null
           fi
           for n in $(gh issue list --label upstream-change --state open --json number --jq '.[].number'); do
             gh issue close "$n" --comment "Reviewed; baseline updated."

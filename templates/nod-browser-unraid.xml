@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-browser-unraid</Name>
+  <Repository>ghcr.io/repires/nod-browser:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-browser</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (3 of 6): headless browser that Nod uses on your behalf. nod-server drives it only through nod-runtime, never over the network. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Keep the container name unchanged: nod-server and nod-runtime look it up by name.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-browser-unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--hostname=nod-browser --restart=unless-stopped --init --read-only --cap-drop=ALL --cap-add=CHOWN --cap-add=SETUID --cap-add=SETGID --security-opt=no-new-privileges:true --pids-limit=1024 --memory=3g --shm-size=512m --tmpfs=/tmp:size=512m --tmpfs=/home/node:uid=1000,gid=1000,mode=700,size=256m</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>Part of the Nod app: install all six nod-* templates.</Requires>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/browser</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment/>
+  <Labels/>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/nod/browser" Mode="rw" Description="Browser profile and control socket. Ownership is set to uid 1000 on first start." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nod/browser</Config>
+</Container>

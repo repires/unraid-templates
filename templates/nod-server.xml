@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-server</Name>
+  <Repository>ghcr.io/repires/nod-server:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-server</Registry>
+  <Network>nod</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (6 of 6): Nod is a self-hosted personal AI assistant from the n8n team. This container is the app and API server. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Install this last: nod-postgres, nod-runtime, nod-browser-unraid, nod-workspace-network and nod-workspace-unraid must already be running.
+
+HTTPS is required. Nod only accepts the exact origin set in Public URL, and plain HTTP is allowed only on localhost. Put Nod behind a reverse proxy (for example SWAG, Nginx Proxy Manager or Traefik) pointing at this container's port 4310, or use Tailscale Serve, and enter that HTTPS address as Public URL. Opening http://[server IP]:4310 directly returns 403.
+
+On first start Nod generates NOD_AUTH_TOKEN and NOD_VAULT_KEY in [AppData]/secrets.env. Sign in with NOD_AUTH_TOKEN from that file. Back up NOD_VAULT_KEY: without it, saved credentials cannot be decrypted. Connect an AI model after signing in, under Models.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-server.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --read-only --cap-drop=ALL --cap-add=CHOWN --cap-add=SETUID --cap-add=SETGID --security-opt=no-new-privileges:true --pids-limit=512 --memory=2g --tmpfs=/tmp:uid=1000,gid=1000,mode=1777,size=256m</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>The "nod" Docker network (docker network create nod), an HTTPS reverse proxy or Tailscale Serve, and the other five nod-* templates installed first.</Requires>
+  <Networking>
+    <Mode>nod</Mode>
+    <Publish>
+      <Port>
+        <HostPort>4310</HostPort>
+        <ContainerPort>4310</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/server</HostDir>
+      <ContainerDir>/var/lib/nod</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/workspaces</HostDir>
+      <ContainerDir>/var/lib/nod/workspaces</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value/><Name>NOD_PUBLIC_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>NOD_POSTGRES_PASSWORD</Name><Mode/></Variable>
+    <Variable><Value/><Name>NOD_AUTH_TOKEN</Name><Mode/></Variable>
+    <Variable><Value/><Name>NOD_VAULT_KEY</Name><Mode/></Variable>
+    <Variable><Value>nod-postgres</Value><Name>NOD_POSTGRES_HOST</Name><Mode/></Variable>
+    <Variable><Value>tcp://nod-runtime:2375</Value><Name>DOCKER_HOST</Name><Mode/></Variable>
+    <Variable><Value>nod-workspace-unraid</Value><Name>WORKSPACE_CONTAINER</Name><Mode/></Variable>
+    <Variable><Value>nod-browser-unraid</Value><Name>BROWSER_CONTAINER</Name><Mode/></Variable>
+    <Variable><Value>false</Value><Name>NOD_ANALYTICS_ENABLED</Name><Mode/></Variable>
+    <Variable><Value>false</Value><Name>NOD_FEEDBACK_ENABLED</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Web port" Target="4310" Default="4310" Mode="tcp" Description="Host port your HTTPS reverse proxy (or Tailscale Serve) forwards to. Direct browser access to this port is refused, because Nod requires HTTPS." Type="Port" Display="always" Required="true" Mask="false">4310</Config>
+  <Config Name="AppData" Target="/var/lib/nod" Default="/mnt/user/appdata/nod/server" Mode="rw" Description="Sessions, settings, encrypted credentials and the generated secrets.env. Ownership is set to uid 1000 on first start." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nod/server</Config>
+  <Config Name="Workspaces" Target="/var/lib/nod/workspaces" Default="/mnt/user/appdata/nod/workspaces" Mode="rw" Description="Session workspaces. Must be the same host folder as Workspaces in nod-workspace-unraid." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nod/workspaces</Config>
+  <Config Name="Public URL" Target="NOD_PUBLIC_URL" Default="" Mode="" Description="The exact HTTPS origin you open Nod at, for example https://nod.example.com (no path or trailing slash)." Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="Database password" Target="NOD_POSTGRES_PASSWORD" Default="" Mode="" Description="Same value as Database password in nod-postgres." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Auth token" Target="NOD_AUTH_TOKEN" Default="" Mode="" Description="Optional. Leave empty to use the token generated in [AppData]/secrets.env. If set: at least 43 letters, digits, - or _." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Vault key" Target="NOD_VAULT_KEY" Default="" Mode="" Description="Optional. Leave empty to use the key generated in [AppData]/secrets.env. If set: 32 random bytes, base64 encoded (openssl rand -base64 32). Never change it once credentials are saved." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Database host" Target="NOD_POSTGRES_HOST" Default="nod-postgres" Mode="" Description="Container name of the Nod database." Type="Variable" Display="advanced" Required="true" Mask="false">nod-postgres</Config>
+  <Config Name="Docker gateway" Target="DOCKER_HOST" Default="tcp://nod-runtime:2375" Mode="" Description="Address of nod-runtime." Type="Variable" Display="advanced" Required="true" Mask="false">tcp://nod-runtime:2375</Config>
+  <Config Name="Workspace container" Target="WORKSPACE_CONTAINER" Default="nod-workspace-unraid" Mode="" Description="Name of the workspace container." Type="Variable" Display="advanced" Required="true" Mask="false">nod-workspace-unraid</Config>
+  <Config Name="Browser container" Target="BROWSER_CONTAINER" Default="nod-browser-unraid" Mode="" Description="Name of the browser container." Type="Variable" Display="advanced" Required="true" Mask="false">nod-browser-unraid</Config>
+  <Config Name="Analytics" Target="NOD_ANALYTICS_ENABLED" Default="false" Mode="" Description="Send usage analytics to the Nod team." Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+  <Config Name="Feedback" Target="NOD_FEEDBACK_ENABLED" Default="false" Mode="" Description="Enable in-app feedback sent to the Nod team." Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+</Container>

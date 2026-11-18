@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-workspace-network</Name>
+  <Repository>ghcr.io/repires/nod-workspace:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-workspace</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (4 of 6): firewall that owns the network of nod-workspace-unraid. It lets the workspace reach the public internet but blocks your LAN, Tailscale (100.64.0.0/10), Docker networks and other private ranges. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Install this before nod-workspace-unraid. If you restart or update this container, restart nod-workspace-unraid afterwards.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-workspace-network.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--user=root --entrypoint=/usr/local/bin/nod-workspace-network --dns=1.1.1.1 --dns=8.8.8.8 --restart=unless-stopped --init --read-only --cap-drop=ALL --cap-add=NET_ADMIN --security-opt=no-new-privileges:true --pids-limit=32 --memory=64m --tmpfs=/tmp:size=1m --health-cmd='test -f /tmp/network-ready' --health-interval=2s --health-timeout=3s --health-retries=10</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>Part of the Nod app: install all six nod-* templates.</Requires>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish/>
+  </Networking>
+  <Data/>
+  <Environment/>
+  <Labels/>
+</Container>

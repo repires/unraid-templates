@@ -1,0 +1,3 @@
+# Copied from the upstream release at build time.
+images/nod/runtime/docker-proxy.mjs
+.DS_Store

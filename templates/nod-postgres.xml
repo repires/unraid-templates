@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-postgres</Name>
+  <Repository>ghcr.io/repires/nod-postgres:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-postgres</Registry>
+  <Network>nod</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (1 of 6): PostgreSQL 17 database for Nod, the self-hosted personal AI assistant from the n8n team. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Install order: nod-postgres, nod-runtime, nod-browser-unraid, nod-workspace-network, nod-workspace-unraid, nod-server.
+
+Before installing, create the shared network once in the Unraid terminal: docker network create nod
+
+Choose a database password made of letters and digits only, and enter the same password in nod-server.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-postgres.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>The "nod" Docker network (docker network create nod). Part of the Nod app: install all six nod-* templates.</Requires>
+  <Networking>
+    <Mode>nod</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/postgres</HostDir>
+      <ContainerDir>/var/lib/postgresql/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value/>
+      <Name>POSTGRES_PASSWORD</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="AppData" Target="/var/lib/postgresql/data" Default="/mnt/user/appdata/nod/postgres" Mode="rw" Description="PostgreSQL data directory." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nod/postgres</Config>
+  <Config Name="Database password" Target="POSTGRES_PASSWORD" Default="" Mode="" Description="Letters and digits only (for example the output of: openssl rand -hex 24). Enter the same value as Database password in nod-server." Type="Variable" Display="always" Required="true" Mask="true"/>
+</Container>

@@ -1,0 +1,101 @@
+name: Nod images
+
+# Builds Nod's self-host images from an upstream release of n8n-io/nod, adds the
+# Unraid wrappers in images/nod, and publishes them to ghcr.io/repires/nod-*.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Upstream release tag (nod-vX.Y.Z). Empty = latest release.
+        required: false
+      force:
+        description: Rebuild even if this version is already published.
+        type: boolean
+        default: false
+  schedule:
+    - cron: '23 7 * * *'
+  push:
+    branches: [main]
+    paths: ['images/nod/**', '.github/workflows/nod-images.yml']
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: nod-images
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io/repires
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve upstream release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
+          FORCE: ${{ inputs.force || github.event_name == 'push' }}
+        run: |
+          tag=${INPUT_TAG:-$(gh api repos/n8n-io/nod/releases/latest --jq .tag_name)}
+          case $tag in nod-v[0-9]*) ;; *) echo "Unexpected tag: $tag" >&2; exit 1 ;; esac
+          ver=${tag#nod-v}
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "revision=$(gh api "repos/n8n-io/nod/commits/$tag" --jq .sha)" >> "$GITHUB_OUTPUT"
+          if [ "$FORCE" != true ] && docker manifest inspect "$REGISTRY/nod-server:$ver" >/dev/null 2>&1; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Nod $ver is already published."
+          fi
+
+      - name: Check out n8n-io/nod
+        if: steps.release.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: n8n-io/nod
+          ref: ${{ steps.release.outputs.tag }}
+          path: upstream
+
+      - uses: docker/login-action@v3
+        if: steps.release.outputs.skip != 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push
+        if: steps.release.outputs.skip != 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          REVISION: ${{ steps.release.outputs.revision }}
+        run: |
+          set -euo pipefail
+          labels=(
+            --label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}"
+            --label "org.opencontainers.image.version=$VERSION"
+            --label "org.opencontainers.image.licenses=Apache-2.0"
+            --label "org.opencontainers.image.description=Unofficial Unraid packaging of Nod $VERSION (upstream n8n-io/nod@$REVISION)"
+          )
+          # Upstream images, exactly as deployment/self-host/compose.yaml builds them.
+          docker build -f upstream/deployment/self-host/Dockerfile -t base/nod-server upstream
+          docker build -f upstream/Dockerfile.browser -t base/nod-browser upstream
+          docker build -f upstream/Dockerfile.workspace -t base/nod-workspace upstream
+          cp upstream/deployment/self-host/docker-proxy.mjs images/nod/runtime/docker-proxy.mjs
+
+          publish() { # <name> <docker build args...>
+            local name=$1; shift
+            docker build "${labels[@]}" -t "$REGISTRY/$name:$VERSION" -t "$REGISTRY/$name:latest" "$@" images/nod
+            docker push "$REGISTRY/$name:$VERSION"
+            docker push "$REGISTRY/$name:latest"
+          }
+          for name in server browser workspace; do
+            publish "nod-$name" --build-arg "BASE=base/nod-$name" -f "images/nod/$name/Dockerfile"
+          done
+          publish nod-runtime --pull -f images/nod/runtime/Dockerfile
+          publish nod-postgres --pull -f images/nod/postgres/Dockerfile

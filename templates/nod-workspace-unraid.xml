@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-workspace-unraid</Name>
+  <Repository>ghcr.io/repires/nod-workspace:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-workspace</Registry>
+  <Network>container:nod-workspace-network</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (5 of 6): sandbox where Nod runs commands and works with files for your sessions. It shares the firewalled network of nod-workspace-network, so it can reach the public internet but not your LAN, Tailscale or other containers. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Keep the container name unchanged: nod-server and nod-runtime look it up by name. The Workspaces path must be the same host folder as in nod-server.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-workspace-unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --cap-drop=ALL --cap-add=CHOWN --cap-add=SETUID --cap-add=SETGID --security-opt=no-new-privileges:true --pids-limit=512 --memory=2g</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>nod-workspace-network must be installed and running first. Part of the Nod app: install all six nod-* templates.</Requires>
+  <Networking>
+    <Mode>container:nod-workspace-network</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/workspaces</HostDir>
+      <ContainerDir>/workspace</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/nod/workspace-tools</HostDir>
+      <ContainerDir>/home/node</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment/>
+  <Labels/>
+  <Config Name="Workspaces" Target="/workspace" Default="/mnt/user/appdata/nod/workspaces" Mode="rw" Description="Session workspaces. Must be the same host folder as Workspaces in nod-server." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nod/workspaces</Config>
+  <Config Name="Workspace tools" Target="/home/node" Default="/mnt/user/appdata/nod/workspace-tools" Mode="rw" Description="Home folder for tools Nod installs in the workspace." Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/nod/workspace-tools</Config>
+</Container>

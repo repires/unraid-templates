@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nod-runtime</Name>
+  <Repository>ghcr.io/repires/nod-runtime:latest</Repository>
+  <Registry>https://github.com/repires/unraid-templates/pkgs/container/nod-runtime</Registry>
+  <Network>nod</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Overview>Nod (2 of 6): filtered Docker API gateway, using upstream's docker-proxy.mjs. It holds the Docker socket but only allows nod-server to run commands inside nod-workspace-unraid and nod-browser-unraid. Every other Docker request is refused. Unofficial community packaging, not affiliated with n8n GmbH.
+
+Keep the container name and the two container-name variables unchanged unless you also change them in nod-server.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/nod-runtime.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --read-only --cap-drop=ALL --security-opt=no-new-privileges:true --pids-limit=64 --memory=128m</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>The "nod" Docker network (docker network create nod). Part of the Nod app: install all six nod-* templates.</Requires>
+  <Networking>
+    <Mode>nod</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/var/run/docker.sock</HostDir>
+      <ContainerDir>/var/run/docker.sock</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>nod-workspace-unraid</Value>
+      <Name>WORKSPACE_CONTAINER</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>nod-browser-unraid</Value>
+      <Name>BROWSER_CONTAINER</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Docker socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="Host Docker socket. Requests are filtered to exec into the two Nod containers only." Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="Workspace container" Target="WORKSPACE_CONTAINER" Default="nod-workspace-unraid" Mode="" Description="Name of the workspace container (must start with nod-workspace-)." Type="Variable" Display="advanced" Required="true" Mask="false">nod-workspace-unraid</Config>
+  <Config Name="Browser container" Target="BROWSER_CONTAINER" Default="nod-browser-unraid" Mode="" Description="Name of the browser container (must start with nod-browser-)." Type="Variable" Display="advanced" Required="true" Mask="false">nod-browser-unraid</Config>
+</Container>

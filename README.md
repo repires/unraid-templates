@@ -8,6 +8,7 @@ points at its XML in this repository, so template fixes reach installed apps.
 |---|---|---|
 | [ai-memory](#ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
 | [OpenMausBot](#openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
+| [error-pages](#error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
 | [Nod](#nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
@@ -65,6 +66,19 @@ Notes:
   proxy and set Public URL to that address.
 - Webhooks (`/hooks/*`) listen inside the container only in this setup. Use upstream's Compose
   stack with Caddy if you need them reachable.
+
+## error-pages
+
+[error-pages](https://github.com/tarampampam/error-pages) (MIT, by tarampampam) serves themed HTTP
+error pages (404, 502, 503 and others) for a reverse proxy. The template runs the upstream image
+`tarampampam/error-pages:4` as published.
+
+- For Traefik, put the container on Traefik's Docker network and add an `errors` middleware with
+  `service: http://error-pages:8080` and `query: /{status}.html`. Middlewares apply only to routes
+  that match, so an unknown hostname still gets Traefik's own plain 404.
+- The host port is only needed to preview the pages or for a proxy on another network. Unraid's web
+  UI may already use 8080, so pick another port if so.
+- Error pages are served as HTML, JSON, XML or plain text, depending on the request's `Accept` header.
 
 ## Nod
 
@@ -144,9 +158,11 @@ workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
 Report template or image problems in this repository's
 [issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
 themselves upstream: [ai-memory](https://github.com/akitaonrails/ai-memory/issues),
-[OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues), [Nod](https://github.com/n8n-io/nod/issues).
+[OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues),
+[error-pages](https://github.com/tarampampam/error-pages/issues), [Nod](https://github.com/n8n-io/nod/issues).
 
 ## License
 
 The templates, wrappers and workflow in this repository are MIT licensed. ai-memory is MIT
-(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni) and Nod is Apache-2.0 (n8n GmbH).
+(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni), error-pages is MIT (tarampampam) and Nod is
+Apache-2.0 (n8n GmbH).

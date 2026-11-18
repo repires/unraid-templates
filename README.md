@@ -64,8 +64,17 @@ Notes:
 - The container runs as `99:100` (nobody:users), so Unraid-created appdata folders work as is.
 - Plain HTTP is unencrypted. For access beyond your LAN, use Tailscale Serve or an HTTPS reverse
   proxy and set Public URL to that address.
-- Webhooks (`/hooks/*`) listen inside the container only in this setup. Use upstream's Compose
-  stack with Caddy if you need them reachable.
+- **Webhooks** (`/hooks/*`, for GitHub, Stripe and other services) use their own receiver, which
+  only listens inside the container. To reach it from the internet, give it a Unix socket and point
+  a proxy at that socket:
+  1. Set the advanced **Webhook socket folder** to a host folder outside AppData (bots can read
+     AppData), for example `/mnt/user/appdata/openmausbot-run`, and set **Webhook socket** to
+     `/run/openmausbot/hooks.sock`.
+  2. Mount the same folder into your proxy. With Cloudflare Tunnel, mount it into the cloudflared
+     container (for example at `/omb`) and add a public hostname with path `^/hooks/`, service type
+     **UNIX** and URL `/omb/hooks.sock`. The tunnel then exposes only the webhook paths.
+  3. Set **Webhook public URL** to that hostname (`https://hooks.example.com`) so new hook URLs
+     use it. Each hook URL carries its own secret `wh_…` token. The app itself stays private.
 
 ## error-pages
 

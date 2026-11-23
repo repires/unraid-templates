@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rakazo-api</Name>
+  <Repository>ghcr.io/elie222/rakazo/app:latest</Repository>
+  <Registry>https://github.com/elie222/rakazo/pkgs/container/rakazo%2Fapp</Registry>
+  <Network>rakazo</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://rakazo.com</Project>
+  <Overview>Rakazo (3 of 4): API and backend worker service for Rakazo. Runs the Hono/oRPC API server and background turn processors.
+
+Install order: rakazo-postgres, rakazo-supervisor, rakazo-api, rakazo-web.
+
+On first start or upgrade, database migrations automatically deploy before the API service begins serving traffic.</Overview>
+  <Category>AI: Productivity: Tools:Utilities</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rakazo-api.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/rakazo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --security-opt=no-new-privileges:true --pids-limit=512 --memory=2g</ExtraParams>
+  <PostArgs>sh -c "node --enable-source-maps /app/apps/api/dist/cli/migrate-database.js &amp;&amp; node --enable-source-maps /app/apps/api/dist/index.js"</PostArgs>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>rakazo-postgres and rakazo-supervisor must be running first. Part of the Rakazo stack: install all four rakazo-* templates.</Requires>
+  <Networking>
+    <Mode>rakazo</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rakazo/data</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>production</Value><Name>NODE_ENV</Name><Mode/></Variable>
+    <Variable><Value>/data</Value><Name>DATA_DIR</Name><Mode/></Variable>
+    <Variable><Value>0.0.0.0</Value><Name>API_HOST</Name><Mode/></Variable>
+    <Variable><Value>3100</Value><Name>API_PORT</Name><Mode/></Variable>
+    <Variable><Value/><Name>DATABASE_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>DATABASE_MIGRATION_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>BETTER_AUTH_SECRET</Name><Mode/></Variable>
+    <Variable><Value/><Name>BETTER_AUTH_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>WEB_ORIGIN</Name><Mode/></Variable>
+    <Variable><Value/><Name>API_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>ENCRYPTION_KEY</Name><Mode/></Variable>
+    <Variable><Value/><Name>SCREEN_PROXY_SECRET</Name><Mode/></Variable>
+    <Variable><Value/><Name>SANDBOX_SUPERVISOR_TOKEN</Name><Mode/></Variable>
+    <Variable><Value>http://rakazo-supervisor:7091</Value><Name>SANDBOX_SUPERVISOR_URL</Name><Mode/></Variable>
+    <Variable><Value>docker</Value><Name>SANDBOX_PROVIDER</Name><Mode/></Variable>
+    <Variable><Value>true</Value><Name>SIGNUPS_ENABLED</Name><Mode/></Variable>
+    <Variable><Value>true</Value><Name>AUTH_PASSWORD_ENABLED</Name><Mode/></Variable>
+    <Variable><Value/><Name>OPENROUTER_API_KEY</Name><Mode/></Variable>
+    <Variable><Value/><Name>ANTHROPIC_API_KEY</Name><Mode/></Variable>
+    <Variable><Value/><Name>OPENAI_API_KEY</Name><Mode/></Variable>
+    <Variable><Value/><Name>GEMINI_API_KEY</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/rakazo/data" Mode="rw" Description="Shared data directory for attachments, bots, and sandboxes." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/rakazo/data</Config>
+  <Config Name="Database runtime URL" Target="DATABASE_URL" Default="postgres://rakazo_app:APP_PASSWORD@rakazo-postgres:5432/rakazo" Mode="" Description="Database URL for app runtime (rakazo_app role with row-level security). APP_PASSWORD is automatically provisioned during first run." Type="Variable" Display="always" Required="true" Mask="true">postgres://rakazo_app:APP_PASSWORD@rakazo-postgres:5432/rakazo</Config>
+  <Config Name="Database migration URL" Target="DATABASE_MIGRATION_URL" Default="postgres://rakazo:POSTGRES_PASSWORD@rakazo-postgres:5432/rakazo" Mode="" Description="Database URL for schema migrations (owner role). Uses the password set in rakazo-postgres." Type="Variable" Display="always" Required="true" Mask="true">postgres://rakazo:POSTGRES_PASSWORD@rakazo-postgres:5432/rakazo</Config>
+  <Config Name="Better Auth Secret" Target="BETTER_AUTH_SECRET" Default="" Mode="" Description="Random secret for authentication sessions. Generate with: openssl rand -hex 32" Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Public URL" Target="BETTER_AUTH_URL" Default="https://rakazo.local.repires.com" Mode="" Description="Full public origin URL (HTTPS) used in browser." Type="Variable" Display="always" Required="true" Mask="false">https://rakazo.local.repires.com</Config>
+  <Config Name="Web origin" Target="WEB_ORIGIN" Default="https://rakazo.local.repires.com" Mode="" Description="Web origin matching Public URL." Type="Variable" Display="always" Required="true" Mask="false">https://rakazo.local.repires.com</Config>
+  <Config Name="API URL" Target="API_URL" Default="https://rakazo.local.repires.com" Mode="" Description="API URL matching Public URL." Type="Variable" Display="always" Required="true" Mask="false">https://rakazo.local.repires.com</Config>
+  <Config Name="Encryption key" Target="ENCRYPTION_KEY" Default="" Mode="" Description="Key used for data and credential encryption at rest. 64 hex characters: openssl rand -hex 32. Keep backed up!" Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Screen proxy secret" Target="SCREEN_PROXY_SECRET" Default="" Mode="" Description="Secret for bot screen proxy token signing. Generate with: openssl rand -hex 32. Must match in rakazo-web." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Supervisor token" Target="SANDBOX_SUPERVISOR_TOKEN" Default="" Mode="" Description="Token authenticating supervisor access. Must match rakazo-supervisor." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Signups enabled" Target="SIGNUPS_ENABLED" Default="true" Mode="" Description="Allow new user registrations." Type="Variable" Display="advanced" Required="false" Mask="false">true</Config>
+  <Config Name="OpenRouter API key" Target="OPENROUTER_API_KEY" Default="" Mode="" Description="Optional OpenRouter key for AI models." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Anthropic API key" Target="ANTHROPIC_API_KEY" Default="" Mode="" Description="Optional Anthropic API key." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="OpenAI API key" Target="OPENAI_API_KEY" Default="" Mode="" Description="Optional OpenAI API key." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Gemini API key" Target="GEMINI_API_KEY" Default="" Mode="" Description="Optional Google Gemini API key." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+</Container>

@@ -10,6 +10,7 @@ points at its XML in this repository, so template fixes reach installed apps.
 | <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="24" align="center"> [OpenMausBot](#-openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
 | <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#-error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
 | <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#-rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
+| <img src="icons/rakazo.png" alt="" width="24" align="center"> [Rakazo](#-rakazo) | four `rakazo-*` templates | upstream `ghcr.io/elie222/rakazo/*` |
 | <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#-nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
@@ -109,6 +110,32 @@ It downloads the current rclone into the Data folder on first start.
   on a computer with a browser.
 - To mount remotes with FUSE, add `--device /dev/fuse --cap-add SYS_ADMIN --security-opt
   apparmor:unconfined` to Extra Parameters.
+
+## <img src="icons/rakazo.png" alt="" width="32" align="center"> Rakazo
+
+[Rakazo](https://rakazo.com) (Apache-2.0, by Elie Steinbock) is an open-source, self-hosted
+alternative to Grok Bot, Meta Muse, OpenAI Dots, Instinct, and Hermes Agent. It provides
+persistent AI teammates with their own memory, routines, integrations, and sandboxed Docker
+computers with desktop UI control.
+
+The stack runs using official multi-architecture images (`ghcr.io/elie222/rakazo/*`):
+
+| Template | Purpose | Image |
+|---|---|---|
+| `rakazo-postgres` | PostgreSQL 16 database | `postgres:16` |
+| `rakazo-supervisor` | Docker sandbox supervisor for bot computers | `ghcr.io/elie222/rakazo/app:latest` |
+| `rakazo-api` | API backend & migrations runner | `ghcr.io/elie222/rakazo/app:latest` |
+| `rakazo-web` | Frontend WebUI & reverse proxy (port 5173) | `ghcr.io/elie222/rakazo/app:latest` |
+
+### Installation
+
+1. Create the Docker network on Unraid:
+   ```bash
+   docker network create rakazo
+   ```
+2. Install templates in order: `rakazo-postgres` -> `rakazo-supervisor` -> `rakazo-api` -> `rakazo-web`.
+3. Configure `Public URL` (e.g. `https://rakazo.local.repires.com`) and secrets (`openssl rand -hex 32`).
+4. Traefik reverse proxy routes HTTPS traffic to `rakazo-web:5173`.
 
 ## <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="32" align="center"> Nod
 

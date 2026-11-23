@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rakazo-postgres</Name>
+  <Repository>postgres:16</Repository>
+  <Registry>https://hub.docker.com/_/postgres</Registry>
+  <Network>rakazo</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://rakazo.com</Project>
+  <Overview>Rakazo (1 of 4): PostgreSQL 16 database for Rakazo, the open-source Grok Bot alternative with persistent AI teammates, memory, routines, and Docker computers.
+
+Install order: rakazo-postgres, rakazo-supervisor, rakazo-api, rakazo-web.
+
+Before installing, create the shared network once in the Unraid terminal:
+docker network create rakazo
+
+Choose a database password (owner) and write it down. You will also use it in rakazo-api and rakazo-web.</Overview>
+  <Category>AI: Productivity: Tools:Utilities</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rakazo-postgres.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/rakazo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --security-opt=no-new-privileges:true --pids-limit=200 --memory=2g</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>The "rakazo" Docker network (docker network create rakazo). Part of the Rakazo stack: install all four rakazo-* templates.</Requires>
+  <Networking>
+    <Mode>rakazo</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rakazo/postgres</HostDir>
+      <ContainerDir>/var/lib/postgresql/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>rakazo</Value><Name>POSTGRES_USER</Name><Mode/></Variable>
+    <Variable><Value/><Name>POSTGRES_PASSWORD</Name><Mode/></Variable>
+    <Variable><Value>rakazo</Value><Name>POSTGRES_DB</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="AppData" Target="/var/lib/postgresql/data" Default="/mnt/user/appdata/rakazo/postgres" Mode="rw" Description="PostgreSQL data directory." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/rakazo/postgres</Config>
+  <Config Name="Database user" Target="POSTGRES_USER" Default="rakazo" Mode="" Description="PostgreSQL owner username." Type="Variable" Display="advanced" Required="true" Mask="false">rakazo</Config>
+  <Config Name="Database password" Target="POSTGRES_PASSWORD" Default="" Mode="" Description="PostgreSQL owner password. Letters and digits only (e.g. openssl rand -hex 16). Keep safe; used for migrations and database maintenance." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Database name" Target="POSTGRES_DB" Default="rakazo" Mode="" Description="PostgreSQL database name." Type="Variable" Display="advanced" Required="true" Mask="false">rakazo</Config>
+</Container>

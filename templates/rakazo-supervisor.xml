@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rakazo-supervisor</Name>
+  <Repository>ghcr.io/elie222/rakazo/app:latest</Repository>
+  <Registry>https://github.com/elie222/rakazo/pkgs/container/rakazo%2Fapp</Registry>
+  <Network>rakazo</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://rakazo.com</Project>
+  <Overview>Rakazo (2 of 4): Sandbox supervisor for Rakazo. It manages Docker-in-Docker bot computers and desktops on Unraid.
+
+Install order: rakazo-postgres, rakazo-supervisor, rakazo-api, rakazo-web.
+
+Supervisor needs access to the Docker socket to spin up isolated container sandboxes for bot computers.</Overview>
+  <Category>AI: Productivity: Tools:Utilities</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rakazo-supervisor.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/rakazo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --security-opt=no-new-privileges:true --pids-limit=256 --memory=1g</ExtraParams>
+  <PostArgs>pnpm --filter @rakazo/sandbox-supervisor start</PostArgs>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>rakazo-postgres must be running. Part of the Rakazo stack: install all four rakazo-* templates.</Requires>
+  <Networking>
+    <Mode>rakazo</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/var/run/docker.sock</HostDir>
+      <ContainerDir>/var/run/docker.sock</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rakazo/data</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>production</Value><Name>NODE_ENV</Name><Mode/></Variable>
+    <Variable><Value>/data</Value><Name>DATA_DIR</Name><Mode/></Variable>
+    <Variable><Value>0.0.0.0</Value><Name>SUPERVISOR_HOST</Name><Mode/></Variable>
+    <Variable><Value>7091</Value><Name>SUPERVISOR_PORT</Name><Mode/></Variable>
+    <Variable><Value>/var/run/docker.sock</Value><Name>DOCKER_SOCKET</Name><Mode/></Variable>
+    <Variable><Value>ghcr.io/elie222/rakazo/computer:latest</Value><Name>RAKAZO_COMPUTER_IMAGE</Name><Mode/></Variable>
+    <Variable><Value/><Name>SANDBOX_SUPERVISOR_TOKEN</Name><Mode/></Variable>
+    <Variable><Value>info</Value><Name>LOG_LEVEL</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Docker socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="ro" Description="Docker socket for container sandbox management." Type="Path" Display="always" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/rakazo/data" Mode="rw" Description="Shared storage for bot homes and sandboxes." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/rakazo/data</Config>
+  <Config Name="Supervisor token" Target="SANDBOX_SUPERVISOR_TOKEN" Default="" Mode="" Description="Dedicated token authenticating API communication with the supervisor. Generate with: openssl rand -hex 32. Must match in rakazo-api and rakazo-web." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="Log level" Target="LOG_LEVEL" Default="info" Mode="" Description="Logging verbosity (debug, info, warn, error)." Type="Variable" Display="advanced" Required="false" Mask="false">info</Config>
+</Container>

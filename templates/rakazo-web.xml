@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rakazo-web</Name>
+  <Repository>ghcr.io/elie222/rakazo/app:latest</Repository>
+  <Registry>https://github.com/elie222/rakazo/pkgs/container/rakazo%2Fapp</Registry>
+  <Network>rakazo</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/repires/unraid-templates/issues</Support>
+  <Project>https://rakazo.com</Project>
+  <Overview>Rakazo (4 of 4): Web interface and frontend gateway for Rakazo (React 19 / Vite preview).
+
+Install order: rakazo-postgres, rakazo-supervisor, rakazo-api, rakazo-web.
+
+Serves the responsive web app, integrates realtime updates, and proxies API/WebSocket traffic. For LAN/reverse proxy access, configure your Traefik router or port forward to port 5173.</Overview>
+  <Category>AI: Productivity: Tools:Utilities</Category>
+  <WebUI>http://[IP]:[PORT:5173]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/rakazo-web.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/rakazo.png</Icon>
+  <ExtraParams>--restart=unless-stopped --init --security-opt=no-new-privileges:true --pids-limit=128 --memory=1g</ExtraParams>
+  <PostArgs>node_modules/.bin/vite preview --host 0.0.0.0 --port 5173</PostArgs>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>rakazo-api must be running. Part of the Rakazo stack: install all four rakazo-* templates.</Requires>
+  <Networking>
+    <Mode>rakazo</Mode>
+    <Publish>
+      <Port>
+        <HostPort>5173</HostPort>
+        <ContainerPort>5173</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/rakazo/webassets</HostDir>
+      <ContainerDir>/app/apps/web/asset-archive</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>production</Value><Name>NODE_ENV</Name><Mode/></Variable>
+    <Variable><Value>http://rakazo-api:3100</Value><Name>API_PROXY_TARGET</Name><Mode/></Variable>
+    <Variable><Value>rakazo.local.repires.com</Value><Name>RAKAZO_HOST</Name><Mode/></Variable>
+    <Variable><Value>localhost,127.0.0.1,rakazo.local.repires.com</Value><Name>RAKAZO_ALLOWED_HOSTS</Name><Mode/></Variable>
+    <Variable><Value/><Name>SCREEN_PROXY_SECRET</Name><Mode/></Variable>
+    <Variable><Value>4</Value><Name>RAYON_NUM_THREADS</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Web Port" Target="5173" Default="5173" Mode="tcp" Description="Web interface port (Vite preview)." Type="Port" Display="always" Required="true" Mask="false">5173</Config>
+  <Config Name="Web Assets Archive" Target="/app/apps/web/asset-archive" Default="/mnt/user/appdata/rakazo/webassets" Mode="rw" Description="Persistent archive for hashed web assets." Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/rakazo/webassets</Config>
+  <Config Name="Public Hostname" Target="RAKAZO_HOST" Default="rakazo.local.repires.com" Mode="" Description="Public domain name accessed by clients (e.g. rakazo.local.repires.com)." Type="Variable" Display="always" Required="true" Mask="false">rakazo.local.repires.com</Config>
+  <Config Name="Allowed Hosts" Target="RAKAZO_ALLOWED_HOSTS" Default="localhost,127.0.0.1,rakazo.local.repires.com" Mode="" Description="Comma-separated hostnames and IPs allowed to connect to the Vite web server." Type="Variable" Display="always" Required="true" Mask="false">localhost,127.0.0.1,rakazo.local.repires.com</Config>
+  <Config Name="Screen proxy secret" Target="SCREEN_PROXY_SECRET" Default="" Mode="" Description="Must match SCREEN_PROXY_SECRET in rakazo-api." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="API Proxy Target" Target="API_PROXY_TARGET" Default="http://rakazo-api:3100" Mode="" Description="Backend API target URL for the web proxy." Type="Variable" Display="advanced" Required="true" Mask="false">http://rakazo-api:3100</Config>
+</Container>

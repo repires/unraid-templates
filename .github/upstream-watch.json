@@ -113,6 +113,30 @@
           "src/providers/docker/workspace-network.sh": "8d11dc3239845bb6fb7605d3b0e53fb19b96b5e769712f7ae57fe44fb6f7ca1e"
         }
       }
+    },
+    "rakazo": {
+      "repo": "elie222/rakazo",
+      "ref": "release",
+      "templates": [
+        "rakazo-postgres",
+        "rakazo-supervisor",
+        "rakazo-api",
+        "rakazo-web"
+      ],
+      "files": [
+        "infra/compose/docker-compose.images.yml",
+        "infra/compose/.env.images.example",
+        "infra/compose/Dockerfile"
+      ],
+      "baseline": {
+        "ref": "v0.14.0",
+        "commit": "e35623089d81d4590c67e997f0a6d0c6ca7e4b9e",
+        "files": {
+          "infra/compose/docker-compose.images.yml": "",
+          "infra/compose/.env.images.example": "",
+          "infra/compose/Dockerfile": ""
+        }
+      }
     }
   }
 }

@@ -13,6 +13,10 @@ Unraid templates maintained by repires.
 
 **Rakazo**: open-source Grok Bot alternative with persistent AI teammates, memory, routines, and Docker computers (https://rakazo.com), packaged for Unraid as four containers: database, sandbox supervisor, API, and web interface. Templates use official GHCR images.
 
+**immich-photo-manager**: MCP server bringing Immich library management, search, album creation, person queries, and PDF/archive exporting to AI agents over HTTP (https://github.com/drolosoft/immich-photo-manager).
+
+**immich-autotag**: automated rule engine for Immich to batch organize photos, assign smart tags and albums, fix dates, and apply permissions via cron (https://github.com/txemi/immich-autotag).
+
 **Nod**: a self-hosted personal AI assistant from the n8n team (https://nod.n8n.io), packaged for Unraid as six containers: database, Docker gateway, browser, workspace firewall, workspace sandbox and server. This is unofficial community packaging and is not affiliated with n8n GmbH. Images are built from upstream releases by GitHub Actions in this repository.
 
 Support and bug reports: https://github.com/repires/unraid-templates/issues

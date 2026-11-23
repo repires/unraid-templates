@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>immich-autotag</Name>
+  <Repository>txemi/immich-autotag:cron</Repository>
+  <Registry>https://hub.docker.com/r/txemi/immich-autotag</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/txemi/immich-autotag/issues</Support>
+  <Project>https://github.com/txemi/immich-autotag</Project>
+  <Overview>Immich AutoTag is a powerful automated rule engine for Immich. It automates batch photo and video organization: automatically creates and assigns albums, applies smart tags, fixes broken or future EXIF dates, applies user permissions, and organizes legacy photo imports based on flexible declarative YAML rules.
+
+The :cron image runs scheduled periodic processing in the background according to CRON_SCHEDULE (default: hourly).
+
+Template maintained by repires; immich-autotag is developed by txemi (GPL-3.0).</Overview>
+  <Category>MediaApp:Photos Tools:Utilities</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/immich-autotag.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/immich-autotag.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>An active Immich server and an Immich API key created in Immich under Account Settings -&gt; API Keys.</Requires>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/immich-autotag/config</HostDir>
+      <ContainerDir>/root/.config/immich_autotag</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/immich-autotag/logs</HostDir>
+      <ContainerDir>/root/logs</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>0 * * * *</Value><Name>CRON_SCHEDULE</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Config Directory" Target="/root/.config/immich_autotag" Default="/mnt/user/appdata/immich-autotag/config" Mode="rw" Description="Directory containing config.yaml and rule definitions." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/immich-autotag/config</Config>
+  <Config Name="Logs Directory" Target="/root/logs" Default="/mnt/user/appdata/immich-autotag/logs" Mode="rw" Description="Directory where execution logs are written." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/immich-autotag/logs</Config>
+  <Config Name="Cron Schedule" Target="CRON_SCHEDULE" Default="0 * * * *" Mode="" Description="Cron expression defining when AutoTag runs (default: '0 * * * *' runs every hour on the hour; '*/15 * * * *' runs every 15 min)." Type="Variable" Display="always" Required="true" Mask="false">0 * * * *</Config>
+</Container>

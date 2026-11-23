@@ -11,6 +11,8 @@ points at its XML in this repository, so template fixes reach installed apps.
 | <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#-error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
 | <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#-rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
 | <img src="icons/rakazo.png" alt="" width="24" align="center"> [Rakazo](#-rakazo) | four `rakazo-*` templates | upstream `ghcr.io/elie222/rakazo/*` |
+| <img src="icons/immich-photo-manager.png" alt="" width="24" align="center"> [immich-photo-manager](#-immich-photo-manager) | `immich-photo-manager` | upstream `ghcr.io/drolosoft/immich-photo-manager` |
+| <img src="icons/immich-autotag.png" alt="" width="24" align="center"> [immich-autotag](#-immich-autotag) | `immich-autotag` | upstream `txemi/immich-autotag` |
 | <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#-nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
 
 Tested on Unraid 7.3 with Docker 29.
@@ -209,6 +211,27 @@ The daily run does nothing if the latest upstream release is already published.
 Each image is tagged `:<version>` and `:latest`, and the templates use `:latest`, so Unraid
 shows an update when a new Nod release is published. To rebuild a specific release, run the
 workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
+
+## <img src="icons/immich-photo-manager.png" alt="" width="32" align="center"> immich-photo-manager
+
+[immich-photo-manager](https://github.com/drolosoft/immich-photo-manager) (MIT, by drolosoft) is an
+MCP (Model Context Protocol) server that brings rich photo library management, search, album creation,
+person/face querying, and PDF/archive exporting to AI agents (Claude, Codex, Antigravity, OpenCode,
+Cursor) via Streamable HTTP. It runs the upstream image `ghcr.io/drolosoft/immich-photo-manager:latest`.
+
+1. Point **Immich Base URL** to your Immich server (e.g. `http://immich_server:2283` or `http://<LAN_IP>:8001`).
+2. Supply your **Immich API Key** from Immich Account Settings.
+3. Access MCP clients at `http://<server>:8626/mcp` and healthcheck at `http://<server>:8626/health`.
+
+## <img src="icons/immich-autotag.png" alt="" width="32" align="center"> immich-autotag
+
+[immich-autotag](https://github.com/txemi/immich-autotag) (GPL-3.0, by txemi) is an automated rule engine
+for Immich. It automates batch photo and video organization: assigns smart tags, creates and organizes
+albums, fixes invalid or future dates, applies permissions, and schedules runs via cron.
+The template runs upstream `txemi/immich-autotag:cron`.
+
+1. Configure rule definitions in `/mnt/user/appdata/immich-autotag/config/config.yaml`.
+2. Scheduled processing runs automatically according to **CRON_SCHEDULE** (default: hourly).
 
 ## Keeping templates current
 

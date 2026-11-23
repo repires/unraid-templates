@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>immich-photo-manager</Name>
+  <Repository>ghcr.io/drolosoft/immich-photo-manager:latest</Repository>
+  <Registry>https://github.com/drolosoft/immich-photo-manager/pkgs/container/immich-photo-manager</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/drolosoft/immich-photo-manager/issues</Support>
+  <Project>https://github.com/drolosoft/immich-photo-manager</Project>
+  <Overview>immich-photo-manager is an MCP (Model Context Protocol) server that brings rich photo library management, search, album creation, person/face querying, and PDF/archive exporting to AI agents (Claude, Codex, Antigravity, OpenCode, Cursor, and any MCP client) via Streamable HTTP.
+
+It exposes MCP endpoints on /mcp and liveness check on /health. Persistent exports and configuration are saved in /data.
+
+Template maintained by repires; immich-photo-manager is developed by drolosoft (MIT).</Overview>
+  <Category>MediaApp:Photos Tools:Utilities AI:</Category>
+  <WebUI>http://[IP]:[PORT:8626]/health</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/repires/unraid-templates/main/templates/immich-photo-manager.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/repires/unraid-templates/main/icons/immich-photo-manager.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>An active Immich server and an Immich API key created in Immich under Account Settings -&gt; API Keys.</Requires>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8626</HostPort>
+        <ContainerPort>8626</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/immich-photo-manager</HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable><Value>http://192.168.86.11:8001</Value><Name>IMMICH_BASE_URL</Name><Mode/></Variable>
+    <Variable><Value/><Name>IMMICH_API_KEY</Name><Mode/></Variable>
+    <Variable><Value>0.0.0.0</Value><Name>MCP_HOST</Name><Mode/></Variable>
+    <Variable><Value>8626</Value><Name>MCP_PORT</Name><Mode/></Variable>
+    <Variable><Value>http</Value><Name>MCP_TRANSPORT</Name><Mode/></Variable>
+    <Variable><Value>*</Value><Name>MCP_ALLOWED_HOSTS</Name><Mode/></Variable>
+    <Variable><Value>/data/.immich-config</Value><Name>IMMICH_CACHE_DIR</Name><Mode/></Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Port: MCP HTTP" Target="8626" Default="8626" Mode="tcp" Description="HTTP port for MCP protocol (/mcp) and health check (/health)." Type="Port" Display="always" Required="true" Mask="false">8626</Config>
+  <Config Name="AppData" Target="/data" Default="/mnt/user/appdata/immich-photo-manager" Mode="rw" Description="Persistent directory for cached credentials, generated PDF books, and archive zip exports." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/immich-photo-manager</Config>
+  <Config Name="Immich Base URL" Target="IMMICH_BASE_URL" Default="http://immich_server:2283" Mode="" Description="Base URL of your Immich server. If attached to custom immich network, use http://immich_server:2283; on bridge network, use http://&lt;UNRAID_IP&gt;:8001." Type="Variable" Display="always" Required="true" Mask="false">http://192.168.86.11:8001</Config>
+  <Config Name="Immich API Key" Target="IMMICH_API_KEY" Default="" Mode="" Description="Immich API key with library permissions. Generate one in Immich: Account Settings -&gt; API Keys." Type="Variable" Display="always" Required="true" Mask="true"/>
+  <Config Name="MCP Allowed Hosts" Target="MCP_ALLOWED_HOSTS" Default="*" Mode="" Description="Comma-separated Host header values allowed by the MCP server (DNS rebinding protection). Set to * or list all hostnames/IPs used to contact this service." Type="Variable" Display="advanced" Required="false" Mask="false">*</Config>
+  <Config Name="MCP Host" Target="MCP_HOST" Default="0.0.0.0" Mode="" Description="Bind host inside the container." Type="Variable" Display="advanced" Required="false" Mask="false">0.0.0.0</Config>
+  <Config Name="MCP Port" Target="MCP_PORT" Default="8626" Mode="" Description="Listen port inside the container." Type="Variable" Display="advanced" Required="false" Mask="false">8626</Config>
+  <Config Name="Cache &amp; Config Directory" Target="IMMICH_CACHE_DIR" Default="/data/.immich-config" Mode="" Description="Path inside container where runtime MCP configuration and session credentials persist." Type="Variable" Display="advanced" Required="false" Mask="false">/data/.immich-config</Config>
+</Container>

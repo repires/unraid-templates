@@ -235,8 +235,8 @@ The template runs upstream `txemi/immich-autotag:cron`.
 
 ## Keeping templates current
 
-- **Upstream images (ai-memory, OpenMausBot, error-pages, RClone Manager):** the templates follow
-  a moving tag (`latest`, or `4` for error-pages), so Unraid's update check offers each new upstream
+- **Upstream images (ai-memory, OpenMausBot, error-pages, RClone Manager, Rakazo, immich-photo-manager, immich-autotag):** the templates follow
+  a moving tag (`latest`, `cron` for immich-autotag, or `4` for error-pages), so Unraid's update check offers each new upstream
   build. Nothing is rebuilt here.
 - **Nod:** [`nod-images.yml`](.github/workflows/nod-images.yml) builds every new upstream release
   daily, and rebuilds the current one weekly so the Postgres, Node and Debian base images get
@@ -252,13 +252,24 @@ The template runs upstream `txemi/immich-autotag:cron`.
 
 Report template or image problems in this repository's
 [issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
-themselves upstream: [ai-memory](https://github.com/akitaonrails/ai-memory/issues),
-[OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues),
-[error-pages](https://github.com/tarampampam/error-pages/issues),
-[RClone Manager](https://github.com/Zarestia-Dev/rclone-manager/issues), [Nod](https://github.com/n8n-io/nod/issues).
+themselves upstream:
+- [ai-memory](https://github.com/akitaonrails/ai-memory/issues)
+- [OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues)
+- [error-pages](https://github.com/tarampampam/error-pages/issues)
+- [RClone Manager](https://github.com/Zarestia-Dev/rclone-manager/issues)
+- [Rakazo](https://github.com/elie222/rakazo/issues)
+- [Nod](https://github.com/n8n-io/nod/issues)
+- [immich-photo-manager](https://github.com/drolosoft/immich-photo-manager/issues)
+- [immich-autotag](https://github.com/txemi/immich-autotag/issues)
 
 ## License
 
-The templates, wrappers and workflow in this repository are MIT licensed. ai-memory is MIT
-(Fabio Akita), OpenMausBot is Apache-2.0 (Milind Soni), error-pages is MIT (tarampampam),
-RClone Manager is GPL-3.0 (Zarestia-Dev) and Nod is Apache-2.0 (n8n GmbH).
+The templates, wrappers and workflow in this repository are MIT licensed. Upstream project licenses:
+- **ai-memory**: MIT (Fabio Akita)
+- **OpenMausBot**: Apache-2.0 (Milind Soni)
+- **error-pages**: MIT (tarampampam)
+- **RClone Manager**: GPL-3.0 (Zarestia-Dev)
+- **Rakazo**: AGPL-3.0 (Elie Steinbock)
+- **Nod**: Apache-2.0 (n8n GmbH)
+- **immich-photo-manager**: MIT (drolosoft)
+- **immich-autotag**: GPL-3.0 (txemi)

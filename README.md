@@ -1,275 +1,184 @@
-# <img src="icon.svg" alt="" width="40" align="center"> Unraid templates by repires
+<p align="center">
+  <img src="icon.svg" alt="Unraid Templates by repires" width="80" height="80">
+</p>
 
-Docker templates for Unraid, published in Community Applications as **pires' Repository**.
-Install them from the **Apps** tab by searching for the app name. Each template's `TemplateURL`
-points at its XML in this repository, so template fixes reach installed apps.
+<h1 align="center">Unraid Templates</h1>
 
-| App | Templates | Images |
-|---|---|---|
-| <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="24" align="center"> [ai-memory](#-ai-memory) | `ai-memory` | upstream `akitaonrails/ai-memory` |
-| <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="24" align="center"> [OpenMausBot](#-openmausbot) | `openmausbot` | upstream `ghcr.io/milind-soni/openmausbot` |
-| <img src="icons/error-pages.svg" alt="" width="24" align="center"> [error-pages](#-error-pages) | `error-pages` | upstream `tarampampam/error-pages` |
-| <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="24" align="center"> [RClone Manager](#-rclone-manager) | `rclone-manager` | upstream `ghcr.io/zarestia-dev/rclone-manager` |
-| <img src="icons/rakazo.png" alt="" width="24" align="center"> [Rakazo](#-rakazo) | four `rakazo-*` templates | upstream `ghcr.io/elie222/rakazo/*` |
-| <img src="icons/immich-photo-manager.png" alt="" width="24" align="center"> [immich-photo-manager](#-immich-photo-manager) | `immich-photo-manager` | upstream `ghcr.io/drolosoft/immich-photo-manager` |
-| <img src="icons/immich-autotag.png" alt="" width="24" align="center"> [immich-autotag](#-immich-autotag) | `immich-autotag` | upstream `txemi/immich-autotag` |
-| <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="24" align="center"> [Nod](#-nod) | six `nod-*` templates | `ghcr.io/repires/nod-*`, built here from upstream releases |
+<p align="center">
+  <a href="https://github.com/repires/unraid-templates/actions"><img src="https://img.shields.io/github/actions/workflow/status/repires/unraid-templates/nod-images.yml?branch=main&label=Builds&style=for-the-badge&logo=githubactions&logoColor=white" alt="Builds" height="32"></a>&nbsp;
+  <a href="#templates"><img src="https://img.shields.io/badge/Templates-16-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Templates" height="32"></a>&nbsp;
+  <a href="https://github.com/repires/unraid-templates/commits/main"><img src="https://img.shields.io/github/last-commit/repires/unraid-templates?branch=main&style=for-the-badge&logo=git&logoColor=white&label=Updated" alt="Last commit" height="32"></a>&nbsp;
+  <a href="https://unraid.net"><img src="https://img.shields.io/badge/Unraid-Community%20Apps-f15a2c?style=for-the-badge&logo=unraid&logoColor=white" alt="Unraid" height="32"></a>&nbsp;
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="License" height="32"></a>
+</p>
 
-Tested on Unraid 7.3 with Docker 29.
+<p align="center">
+  Docker XML templates for Unraid, published in Community Applications as <b>pires' Repository</b>.<br>
+  Maintained for modern AI workflows, media tools, and self-hosted services.
+</p>
 
-## <img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" alt="" width="32" align="center"> ai-memory
+---
 
-[ai-memory](https://github.com/akitaonrails/ai-memory) (MIT, by Fabio Akita) gives AI coding agents
-persistent, shared memory over MCP: session capture, a searchable wiki and handoffs between agents.
-It is a single container with a SQLite database. The template runs the upstream image
-`akitaonrails/ai-memory:latest` as published; nothing is rebuilt here.
+## Templates
 
-1. Set **Auth token**, for example from `openssl rand -hex 32`. It is required because without
-   a token ai-memory accepts every request.
-2. Add every hostname and IP your clients use to reach the server to **Allowed hosts**, for example
-   `localhost,127.0.0.1,192.168.1.10,tower.local`. Requests with any other `Host` header are refused.
-3. Point MCP clients at `http://<server>:49374/mcp` with `Authorization: Bearer <token>`. With the
-   ai-memory CLI on the client machine, `ai-memory install-mcp --client <name> --auth-token <token>`
-   writes the client config.
-4. LLM and embedding providers are optional (Advanced view). Without them ai-memory uses
-   full-text search and rule-based summaries.
+### AI & Agents
 
-Notes:
+<img src="https://raw.githubusercontent.com/akitaonrails/ai-memory/v3.4.7/companions/ai-memory-desktop/icons/icon.png" width="72" align="left" alt="ai-memory">
+<a href="https://github.com/akitaonrails/ai-memory#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/ai-memory.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-- The container runs as `99:100` (nobody:users), which owns the appdata folders Unraid creates,
-  so no permission changes are needed.
-- On plain HTTP the bearer token travels unencrypted, and ai-memory logs a warning about it. Use
-  a reverse proxy with HTTPS if clients connect over an untrusted network.
-- The web console (`/web`) needs HTTPS. Put ai-memory behind a reverse proxy, then set
-  **Secure cookie** to `true`, a **Root username** and an **Initial root password**. Clear the
-  password after the first start. **Don't set a root password on plain HTTP:** ai-memory then
-  refuses to start, and keeps refusing until Secure cookie is enabled behind HTTPS.
+**ai-memory**<br>
+Persistent, shared memory for AI coding agents over MCP: session capture, a searchable wiki, and handoffs between agents. Runs upstream `akitaonrails/ai-memory:latest`.
 
-## <img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" alt="" width="32" align="center"> OpenMausBot
+<br clear="all">
 
-[OpenMausBot](https://github.com/milind-soni/OpenMausBot) (Apache-2.0, by Milind Soni) is an
-open-source workspace for AI bots: chat with bots that run Claude Code, Codex, OpenCode and other
-engines, each with its own shell, files and browser. The template runs the project's official
-server image `ghcr.io/milind-soni/openmausbot:latest` as published.
+<img src="https://raw.githubusercontent.com/milind-soni/OpenMausBot/v0.1.169/public/app-icon-512.png" width="72" align="left" alt="OpenMausBot">
+<a href="https://github.com/milind-soni/OpenMausBot#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/openmausbot.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-1. Set **Public URL** to the address devices will use, for example `http://192.168.1.10:8799`,
-   or an `https://` address from Tailscale Serve or a reverse proxy.
-2. Pair your first browser: in the Unraid terminal run `docker exec openmausbot openmausbot pair`
-   and open the printed link (or paste it into the desktop app, or scan the QR code with a phone).
-   Every device pairs once.
-3. Install engines from **Settings → Engines** and sign them in from the app. They live in the
-   AppData folder, so image updates keep them.
+**OpenMausBot**<br>
+Open-source workspace for AI bots: chat with bots that run Claude Code, Codex, OpenCode and other engines, each with its own shell, files, and browser. Runs upstream `ghcr.io/milind-soni/openmausbot:latest`.
 
-Notes:
+<br clear="all">
 
-- `OMB_LAN=1` makes the server listen beyond the container. It still refuses connections from
-  public addresses: only private ranges (10/8, 172.16/12, 192.168/16, Tailscale 100.64/10 and
-  link-local) get through, and each device must pair.
-- The container runs as `99:100` (nobody:users), so Unraid-created appdata folders work as is.
-- Plain HTTP is unencrypted. For access beyond your LAN, use Tailscale Serve or an HTTPS reverse
-  proxy and set Public URL to that address.
-- **Webhooks** (`/hooks/*`, for GitHub, Stripe and other services) use their own receiver, which
-  only listens inside the container. To reach it from the internet, give it a Unix socket and point
-  a proxy at that socket:
-  1. Set the advanced **Webhook socket folder** to a host folder outside AppData (bots can read
-     AppData), for example `/mnt/user/appdata/openmausbot-run`, and set **Webhook socket** to
-     `/run/openmausbot/hooks.sock`.
-  2. Mount the same folder into your proxy. With Cloudflare Tunnel, mount it into the cloudflared
-     container (for example at `/omb`) and add a public hostname with path `^/hooks/`, service type
-     **UNIX** and URL `/omb/hooks.sock`. The tunnel then exposes only the webhook paths.
-  3. Set **Webhook public URL** to that hostname (`https://hooks.example.com`) so new hook URLs
-     use it. Each hook URL carries its own secret `wh_…` token. The app itself stays private.
+<img src="icons/rakazo.png" width="72" align="left" alt="Rakazo">
+<a href="https://rakazo.com"><img src="https://img.shields.io/badge/Website-393939?style=for-the-badge&logo=googlechrome&logoColor=white" align="right" alt="Website"></a>
+<a href="templates/rakazo-web.xml"><img src="https://img.shields.io/badge/4%20Templates-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Templates"></a>
 
-## <img src="icons/error-pages.svg" alt="" width="32" align="center"> error-pages
+**Rakazo**<br>
+Open-source Grok Bot alternative with persistent AI teammates, memory, routines, and Docker computers. Packaged as 4 coordinated templates: `rakazo-postgres`, `rakazo-supervisor`, `rakazo-api`, and `rakazo-web`.
 
-[error-pages](https://github.com/tarampampam/error-pages) (MIT, by tarampampam) serves themed HTTP
-error pages (404, 502, 503 and others) for a reverse proxy. The template runs the upstream image
-`tarampampam/error-pages:4` as published.
+<br clear="all">
 
-- For Traefik, put the container on Traefik's Docker network and add an `errors` middleware with
-  `service: http://error-pages:8080` and `query: /{status}.html`. Middlewares apply only to routes
-  that match, so an unknown hostname still gets Traefik's own plain 404.
-- The host port is only needed to preview the pages or for a proxy on another network. Unraid's web
-  UI may already use 8080, so pick another port if so.
-- Error pages are served as HTML, JSON, XML or plain text, depending on the request's `Accept` header.
+<img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" width="72" align="left" alt="Nod">
+<a href="https://nod.n8n.io"><img src="https://img.shields.io/badge/Website-393939?style=for-the-badge&logo=googlechrome&logoColor=white" align="right" alt="Website"></a>
+<a href="templates/nod-server.xml"><img src="https://img.shields.io/badge/6%20Templates-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Templates"></a>
 
-## <img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" alt="" width="32" align="center"> RClone Manager
+**Nod**<br>
+Self-hosted personal AI assistant from the n8n team. Packaged as 6 templates with secure network isolation and custom-built GHCR images: `nod-postgres`, `nod-runtime`, `nod-browser-unraid`, `nod-workspace-network`, `nod-workspace-unraid`, and `nod-server`.
 
-[RClone Manager](https://github.com/Zarestia-Dev/rclone-manager) (GPL-3.0, by Zarestia-Dev) is a web
-UI for rclone: set up remotes, browse them, and run or schedule sync, copy, move and bisync jobs.
-The template runs the upstream image `ghcr.io/zarestia-dev/rclone-manager:latest` as published.
-It downloads the current rclone into the Data folder on first start.
+<br clear="all">
 
-- It runs as `PUID 99` / `PGID 100` (nobody:users), so jobs can read and write Unraid shares,
-  mounted at `/mnt/user`.
-- Keep storage out of `/home/rclone-manager`. The image's entrypoint recursively changes the owner
-  of that folder, `/data` and `/config` at every start, which on a large share is slow and rewrites
-  every file's owner.
-- Set **Master secret** so saved remote passwords and tokens survive restarts. Without it they are
-  kept in memory only.
-- For Google Drive, OneDrive and Dropbox, rclone's sign-in callback only listens inside the
-  container. Answer **No** to the browser question and paste a token made with `rclone authorize`
-  on a computer with a browser.
-- To mount remotes with FUSE, add `--device /dev/fuse --cap-add SYS_ADMIN --security-opt
-  apparmor:unconfined` to Extra Parameters.
+---
 
-## <img src="icons/rakazo.png" alt="" width="32" align="center"> Rakazo
+### Media & Automation
 
-[Rakazo](https://rakazo.com) (Apache-2.0, by Elie Steinbock) is an open-source, self-hosted
-alternative to Grok Bot, Meta Muse, OpenAI Dots, Instinct, and Hermes Agent. It provides
-persistent AI teammates with their own memory, routines, integrations, and sandboxed Docker
-computers with desktop UI control.
+<img src="icons/immich-photo-manager.png" width="72" align="left" alt="immich-photo-manager">
+<a href="https://github.com/drolosoft/immich-photo-manager#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/immich-photo-manager.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-The stack runs using official multi-architecture images (`ghcr.io/elie222/rakazo/*`):
+**immich-photo-manager**<br>
+Model Context Protocol (MCP) server bringing rich Immich photo library management, search, album creation, person/face querying, and PDF/archive exporting to AI agents over HTTP.
 
-| Template | Purpose | Image |
-|---|---|---|
-| `rakazo-postgres` | PostgreSQL 16 database | `postgres:16` |
-| `rakazo-supervisor` | Docker sandbox supervisor for bot computers | `ghcr.io/elie222/rakazo/app:latest` |
-| `rakazo-api` | API backend & migrations runner | `ghcr.io/elie222/rakazo/app:latest` |
-| `rakazo-web` | Frontend WebUI & reverse proxy (port 5173) | `ghcr.io/elie222/rakazo/app:latest` |
+<br clear="all">
 
-### Installation
+<img src="icons/immich-autotag.png" width="72" align="left" alt="immich-autotag">
+<a href="https://github.com/txemi/immich-autotag#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/immich-autotag.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-1. Create the Docker network on Unraid:
-   ```bash
-   docker network create rakazo
-   ```
-2. Install templates in order: `rakazo-postgres` -> `rakazo-supervisor` -> `rakazo-api` -> `rakazo-web`.
-3. Configure `Public URL` (e.g. `https://rakazo.local.repires.com`) and secrets (`openssl rand -hex 32`).
-4. Traefik reverse proxy routes HTTPS traffic to `rakazo-web:5173`.
+**immich-autotag**<br>
+Automated rule engine for Immich that batch-processes photo and video libraries: applies smart tags and albums, corrects dates, manages permissions, and schedules runs via cron.
 
-## <img src="https://raw.githubusercontent.com/n8n-io/nod/nod-v0.8.4/public/nod-logo.png" alt="" width="32" align="center"> Nod
+<br clear="all">
 
-[Nod](https://nod.n8n.io) is a self-hosted personal AI assistant from the n8n team. Upstream
-ships it as a [Docker Compose stack](https://nod.n8n.io/docs/deploy/self-host/). These templates
-run the same six containers as separate Unraid apps.
+---
 
-> Unofficial community packaging, not affiliated with or endorsed by n8n GmbH.
-> Nod is © n8n GmbH, licensed under Apache-2.0. See its [NOTICE](https://github.com/n8n-io/nod/blob/main/NOTICE)
-> for bundled components, including a GPL-3.0-or-later speech component whose source is in the upstream repository.
+### Network & Utilities
 
-| # | Template | Image | Network | Runs as | Role |
-|---|---|---|---|---|---|
-| 1 | `nod-postgres` | `ghcr.io/repires/nod-postgres` | `nod` | postgres | PostgreSQL 17 (official `postgres:17-alpine` with a healthcheck) |
-| 2 | `nod-runtime` | `ghcr.io/repires/nod-runtime` | `nod` | root, with the Docker socket | Filtered Docker API: only lets `nod-server` exec into the workspace and browser |
-| 3 | `nod-browser-unraid` | `ghcr.io/repires/nod-browser` | `bridge` | uid 1000 | Headless browser |
-| 4 | `nod-workspace-network` | `ghcr.io/repires/nod-workspace` | `bridge` | root, `NET_ADMIN` | Firewall for the workspace: public internet only |
-| 5 | `nod-workspace-unraid` | `ghcr.io/repires/nod-workspace` | `container:nod-workspace-network` | uid 1000 | Command and file sandbox |
-| 6 | `nod-server` | `ghcr.io/repires/nod-server` | `nod`, port 4310 | uid 1000 | App and API |
+<img src="icons/error-pages.svg" width="72" align="left" alt="error-pages">
+<a href="https://github.com/tarampampam/error-pages#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/error-pages.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-### Install
+**error-pages**<br>
+Lightweight, fast, and responsive HTTP error pages with 50+ built-in themes for Traefik, Nginx, HAProxy, and Caddy.
 
-1. Create the shared network once, in the Unraid terminal: `docker network create nod`.
-   Templates 1, 2 and 6 attach to it. If it is missing, Unraid starts them with no network.
-2. Pick a database password made of letters and digits, for example from `openssl rand -hex 24`.
-3. Install the templates **in the order above**. Enter the same database password in
-   `nod-postgres` and `nod-server`.
-4. Nod requires **HTTPS**. Point a reverse proxy (SWAG, Nginx Proxy Manager, Traefik) or
-   Tailscale Serve at port 4310, and set `nod-server`'s **Public URL** to that exact origin, for
-   example `https://nod.example.com`. Nod only answers requests for that origin, so opening
-   `http://<server>:4310` directly returns 403. That is also why the template has no WebUI link.
-5. On first start `nod-server` generates `NOD_AUTH_TOKEN` and `NOD_VAULT_KEY` in
-   `/mnt/user/appdata/nod/server/secrets.env` (unless you set them in the template's Advanced
-   view). Sign in with `NOD_AUTH_TOKEN`, then connect a model under **Models**.
-   **Back up `NOD_VAULT_KEY`:** without it, saved credentials cannot be decrypted.
+<br clear="all">
 
-### Notes
+<img src="https://raw.githubusercontent.com/Zarestia-Dev/rclone-manager/v0.3.6/backend/desktop/icons/icon.png" width="72" align="left" alt="RClone Manager">
+<a href="https://github.com/Zarestia-Dev/rclone-manager#readme"><img src="https://img.shields.io/badge/Repository-393939?style=for-the-badge&logo=github&logoColor=white" align="right" alt="Repository"></a>
+<a href="templates/rclone-manager.xml"><img src="https://img.shields.io/badge/XML%20Template-2496ED?style=for-the-badge&logo=docker&logoColor=white" align="right" alt="XML Template"></a>
 
-- **Container names:** keep them. `nod-server` and `nod-runtime` find the workspace and browser
-  by name, and the runtime only accepts names starting with `nod-workspace-` and `nod-browser-`.
-- **Restart order:** after restarting or updating `nod-workspace-network`, restart
-  `nod-workspace-unraid`. Compose does this automatically; Unraid does not.
-- **Hardening:**
-  - The server, browser, runtime and workspace firewall have a read-only root filesystem.
-  - The server, browser and workspace drop all capabilities except `CHOWN`, `SETUID` and
-    `SETGID`. Their entrypoint uses these as root to give new appdata folders to uid 1000,
-    then runs Nod as the `node` user. The runtime drops all capabilities, and the firewall
-    keeps only `NET_ADMIN`.
-  - Those five containers also set `no-new-privileges` and memory and process limits.
-    `nod-postgres` runs with the official Postgres image's defaults.
-- **Isolation compared with upstream's Compose stack:**
-  - Kept: the workspace firewall blocks LAN, Tailscale (`100.64.0.0/10`), Docker and other
-    private ranges, and the runtime only allows exec into the two Nod containers.
-  - Relaxed: upstream also puts the database and runtime on internal networks with no internet
-    access, and the browser on its own network. Here they share the user-created `nod` bridge,
-    and the browser uses Unraid's default bridge.
-- **Telemetry:** analytics and in-app feedback to the Nod team are off by default.
+**RClone Manager**<br>
+Modern web-based GUI for managing rclone remotes, transfers, file browsing, and automated synchronization tasks.
 
-### Images
+<br clear="all">
 
-[`.github/workflows/nod-images.yml`](.github/workflows/nod-images.yml) publishes five images to
-`ghcr.io/repires`. It runs daily, on manual dispatch, and on pushes that change `images/nod`.
-The daily run does nothing if the latest upstream release is already published.
+---
 
-1. **`nod-server`, `nod-browser`, `nod-workspace`:** built from the upstream release tag with
-   upstream's own Dockerfiles, plus the wrappers in [`images/nod`](images/nod). The wrappers add
-   the appdata-ownership entrypoint, secret generation and healthchecks.
-2. **`nod-runtime`:** `node` with the release's `docker-proxy.mjs`.
-3. **`nod-postgres`:** `postgres:17-alpine` with Nod's database defaults and a healthcheck.
+## Install
 
-Each image is tagged `:<version>` and `:latest`, and the templates use `:latest`, so Unraid
-shows an update when a new Nod release is published. To rebuild a specific release, run the
-workflow manually with its tag (`nod-vX.Y.Z`) and **force** enabled.
+### Via Community Applications (Recommended)
+1. Open the **Apps** tab on your Unraid server.
+2. Search for any template name (e.g., `ai-memory`, `openmausbot`, `nod`, `immich-photo-manager`).
+3. Click **Install**.
 
-## <img src="icons/immich-photo-manager.png" alt="" width="32" align="center"> immich-photo-manager
+### Manual Template Install
+To add a template directly without CA, paste its raw XML URL into **Docker → Add Container → Template**:
+```text
+https://raw.githubusercontent.com/repires/unraid-templates/main/templates/ai-memory.xml
+```
 
-[immich-photo-manager](https://github.com/drolosoft/immich-photo-manager) (MIT, by drolosoft) is an
-MCP (Model Context Protocol) server that brings rich photo library management, search, album creation,
-person/face querying, and PDF/archive exporting to AI agents (Claude, Codex, Antigravity, OpenCode,
-Cursor) via Streamable HTTP. It runs the upstream image `ghcr.io/drolosoft/immich-photo-manager:latest`.
+---
 
-1. Point **Immich Base URL** to your Immich server (e.g. `http://immich_server:2283` or `http://<LAN_IP>:8001`).
-2. Supply your **Immich API Key** from Immich Account Settings.
-3. Access MCP clients at `http://<server>:8626/mcp` and healthcheck at `http://<server>:8626/health`.
+## App Setup & Highlights
 
-## <img src="icons/immich-autotag.png" alt="" width="32" align="center"> immich-autotag
+<details>
+<summary><b>ai-memory Setup Details</b></summary>
 
-[immich-autotag](https://github.com/txemi/immich-autotag) (GPL-3.0, by txemi) is an automated rule engine
-for Immich. It automates batch photo and video organization: assigns smart tags, creates and organizes
-albums, fixes invalid or future dates, applies permissions, and schedules runs via cron.
-The template runs upstream `txemi/immich-autotag:cron`.
+1. Set **Auth token** (e.g. `openssl rand -hex 32`).
+2. Add your server hostnames and IPs to **Allowed hosts** (e.g. `localhost,127.0.0.1,192.168.1.10,tower.local`).
+3. Connect MCP clients at `http://<server>:49374/mcp` with header `Authorization: Bearer <token>`.
+4. Web console (`/web`) requires HTTPS behind a reverse proxy with **Secure cookie** enabled.
+</details>
 
-1. Configure rule definitions in `/mnt/user/appdata/immich-autotag/config/config.yaml`.
-2. Scheduled processing runs automatically according to **CRON_SCHEDULE** (default: hourly).
+<details>
+<summary><b>OpenMausBot Setup Details</b></summary>
 
-## Keeping templates current
+1. Set **Public URL** to your access address (LAN IP or reverse proxy).
+2. Run `docker exec openmausbot openmausbot pair` in the Unraid terminal to link your browser or app.
+3. Install and configure engines under **Settings → Engines**.
+</details>
 
-- **Upstream images (ai-memory, OpenMausBot, error-pages, RClone Manager, Rakazo, immich-photo-manager, immich-autotag):** the templates follow
-  a moving tag (`latest`, `cron` for immich-autotag, or `4` for error-pages), so Unraid's update check offers each new upstream
-  build. Nothing is rebuilt here.
-- **Nod:** [`nod-images.yml`](.github/workflows/nod-images.yml) builds every new upstream release
-  daily, and rebuilds the current one weekly so the Postgres, Node and Debian base images get
-  security fixes between Nod releases.
-- **Upstream watch:** [`upstream-watch.yml`](.github/workflows/upstream-watch.yml) runs weekly and
-  fingerprints the upstream files each template depends on (Dockerfiles, compose files,
-  entrypoints), listed in [`.github/upstream-watch.json`](.github/upstream-watch.json). It also
-  checks error-pages for a new major version. When something changes it opens an
-  `upstream-change` issue with a diff link. After reviewing the template, run the workflow with
-  **accept** to record the new state.
+<details>
+<summary><b>Rakazo Stack Setup Details</b></summary>
 
-## Support
+Requires the `rakazo` Docker network (`docker network create rakazo`). Install the four templates in order:
+1. `rakazo-postgres`
+2. `rakazo-supervisor`
+3. `rakazo-api`
+4. `rakazo-web`
+Access the interface on port `3000`.
+</details>
 
-Report template or image problems in this repository's
-[issues](https://github.com/repires/unraid-templates/issues). Report problems in the apps
-themselves upstream:
-- [ai-memory](https://github.com/akitaonrails/ai-memory/issues)
-- [OpenMausBot](https://github.com/milind-soni/OpenMausBot/issues)
-- [error-pages](https://github.com/tarampampam/error-pages/issues)
-- [RClone Manager](https://github.com/Zarestia-Dev/rclone-manager/issues)
-- [Rakazo](https://github.com/elie222/rakazo/issues)
-- [Nod](https://github.com/n8n-io/nod/issues)
-- [immich-photo-manager](https://github.com/drolosoft/immich-photo-manager/issues)
-- [immich-autotag](https://github.com/txemi/immich-autotag/issues)
+<details>
+<summary><b>Nod Stack Setup Details</b></summary>
+
+Packaged across 6 containers with custom images (`ghcr.io/repires/nod-*`):
+1. `nod-postgres` (Database)
+2. `nod-runtime` (Docker gateway)
+3. `nod-browser-unraid` (Headless browser)
+4. `nod-workspace-network` (Workspace firewall)
+5. `nod-workspace-unraid` (Execution sandbox)
+6. `nod-server` (Application web interface)
+</details>
+
+---
+
+## Maintenance & Builds
+
+- **Upstream Images**: Templates for `ai-memory`, `openmausbot`, `error-pages`, `rclone-manager`, `rakazo`, `immich-photo-manager`, and `immich-autotag` track upstream release tags so Unraid's Docker update advisor notifies you of new releases immediately.
+- **Nod Automated Builds**: [`nod-images.yml`](.github/workflows/nod-images.yml) monitors upstream releases daily and rebuilds images weekly so Debian/Node security patches remain fresh.
+- **Upstream Watcher**: [`upstream-watch.yml`](.github/workflows/upstream-watch.yml) tracks changes in upstream Dockerfiles and dependencies via [`.github/upstream-watch.json`](.github/upstream-watch.json), automatically flagging any breaking upstream adjustments.
+
+---
+
+## Support & Issues
+
+- For template, configuration, or packaging issues, please open an issue in this repository: [repires/unraid-templates/issues](https://github.com/repires/unraid-templates/issues).
+- For upstream bugs in the applications themselves, please consult their respective upstream issue trackers.
+
+---
 
 ## License
 
-The templates, wrappers and workflow in this repository are MIT licensed. Upstream project licenses:
-- **ai-memory**: MIT (Fabio Akita)
-- **OpenMausBot**: Apache-2.0 (Milind Soni)
-- **error-pages**: MIT (tarampampam)
-- **RClone Manager**: GPL-3.0 (Zarestia-Dev)
-- **Rakazo**: AGPL-3.0 (Elie Steinbock)
-- **Nod**: Apache-2.0 (n8n GmbH)
-- **immich-photo-manager**: MIT (drolosoft)
-- **immich-autotag**: GPL-3.0 (txemi)
+This repository and its templates are licensed under the [MIT License](LICENSE). Third-party applications retain their respective upstream licenses.

@@ -1,0 +1,11 @@
+services:
+  immich-photo-manager:
+    image: ghcr.io/drolosoft/immich-photo-manager:latest
+    container_name: immich-photo-manager
+    restart: unless-stopped
+    ports:
+      - "8626:8626"
+    environment:
+      - IMMICH_BASE_URL=http://your-immich-ip:2283
+      - IMMICH_API_KEY=your_immich_api_key
+      - PORT=8626

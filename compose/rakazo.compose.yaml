@@ -1,0 +1,50 @@
+services:
+  rakazo-postgres:
+    image: postgres:16
+    container_name: rakazo-postgres
+    restart: unless-stopped
+    networks:
+      - rakazo-net
+    volumes:
+      - /mnt/cache/appdata/rakazo/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=rakazo
+      - POSTGRES_USER=rakazo
+      - POSTGRES_PASSWORD=${RAKAZO_DB_PASSWORD:-changeme}
+
+  rakazo-supervisor:
+    image: ghcr.io/elie222/rakazo/supervisor:latest
+    container_name: rakazo-supervisor
+    restart: unless-stopped
+    networks:
+      - rakazo-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/user/appdata/rakazo/supervisor:/app/data
+
+  rakazo-api:
+    image: ghcr.io/elie222/rakazo/api:latest
+    container_name: rakazo-api
+    restart: unless-stopped
+    networks:
+      - rakazo-net
+    depends_on:
+      - rakazo-postgres
+      - rakazo-supervisor
+    environment:
+      - DATABASE_URL=postgresql://rakazo:${RAKAZO_DB_PASSWORD:-changeme}@rakazo-postgres:5432/rakazo
+
+  rakazo-web:
+    image: ghcr.io/elie222/rakazo/web:latest
+    container_name: rakazo-web
+    restart: unless-stopped
+    networks:
+      - rakazo-net
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rakazo-api
+
+networks:
+  rakazo-net:
+    driver: bridge

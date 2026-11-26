@@ -1,0 +1,10 @@
+services:
+  immich-autotag:
+    image: txemi/immich-autotag:cron
+    container_name: immich-autotag
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/immich-autotag/config:/config
+    environment:
+      - CRON_SCHEDULE=0 * * * *
+      - TZ=UTC

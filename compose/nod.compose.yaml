@@ -1,0 +1,42 @@
+services:
+  nod-postgres:
+    image: ghcr.io/repires/nod-postgres:latest
+    container_name: nod-postgres
+    restart: unless-stopped
+    networks:
+      - nod-backend
+    volumes:
+      - /mnt/cache/appdata/nod/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nod
+      - POSTGRES_USER=nod
+      - POSTGRES_PASSWORD=${NOD_DB_PASSWORD:-changeme}
+
+  nod-runtime:
+    image: ghcr.io/repires/nod-runtime:latest
+    container_name: nod-runtime
+    restart: unless-stopped
+    networks:
+      - nod-control
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/user/appdata/nod/runtime:/app/data
+
+  nod-server:
+    image: ghcr.io/repires/nod-server:latest
+    container_name: nod-server
+    restart: unless-stopped
+    networks:
+      - nod-backend
+      - nod-control
+    ports:
+      - "5678:5678"
+    depends_on:
+      - nod-postgres
+      - nod-runtime
+
+networks:
+  nod-backend:
+    driver: bridge
+  nod-control:
+    driver: bridge

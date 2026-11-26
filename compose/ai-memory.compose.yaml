@@ -1,0 +1,13 @@
+services:
+  ai-memory:
+    image: akitaonrails/ai-memory:latest
+    container_name: ai-memory
+    restart: unless-stopped
+    ports:
+      - "49374:49374"
+    volumes:
+      - /mnt/user/appdata/ai-memory:/app/data
+    environment:
+      - AI_MEMORY_AUTH_TOKEN=${AI_MEMORY_AUTH_TOKEN:-change_me_to_a_secure_token}
+      - ALLOWED_HOSTS=localhost,127.0.0.1,host.docker.internal
+      - TZ=UTC

@@ -1,0 +1,10 @@
+services:
+  rclone-manager:
+    image: ghcr.io/zarestia-dev/rclone-manager:latest
+    container_name: rclone-manager
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - /mnt/user/appdata/rclone-manager/data:/app/data
+      - /mnt/user:/data:rw

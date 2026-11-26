@@ -1,0 +1,9 @@
+services:
+  error-pages:
+    image: tarampampam/error-pages:latest
+    container_name: error-pages
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - TEMPLATE_NAME=ghost

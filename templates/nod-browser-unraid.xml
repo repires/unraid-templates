@@ -8,7 +8,7 @@
   <Shell>bash</Shell>
   <Privileged>false</Privileged>
   <Support>https://github.com/repires/unraid-templates/issues</Support>
-  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Project>https://github.com/n8n-io/nod</Project>
   <Overview>Nod (3 of 6): headless browser that Nod uses on your behalf. nod-server drives it only through nod-runtime, never over the network. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Keep the container name unchanged: nod-server and nod-runtime look it up by name.</Overview>

@@ -8,7 +8,7 @@
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
   <Support>https://github.com/repires/unraid-templates/issues</Support>
-  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Project>https://github.com/n8n-io/nod</Project>
   <Overview>Nod (6 of 6): Nod is a self-hosted personal AI assistant from the n8n team. This container is the app and API server. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Install this last: nod-postgres, nod-runtime, nod-browser-unraid, nod-workspace-network and nod-workspace-unraid must already be running.

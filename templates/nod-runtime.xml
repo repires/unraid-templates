@@ -8,7 +8,7 @@
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
   <Support>https://github.com/repires/unraid-templates/issues</Support>
-  <Project>https://nod.n8n.io/docs/deploy/self-host/</Project>
+  <Project>https://github.com/n8n-io/nod</Project>
   <Overview>Nod (2 of 6): filtered Docker API gateway, using upstream's docker-proxy.mjs. It holds the Docker socket but only allows nod-server to run commands inside nod-workspace-unraid and nod-browser-unraid. Every other Docker request is refused. Unofficial community packaging, not affiliated with n8n GmbH.
 
 Keep the container name and the two container-name variables unchanged unless you also change them in nod-server.</Overview>
